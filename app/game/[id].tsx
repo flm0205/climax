@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWind
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../../constants/theme';
 import CompactLogo from '../../components/CompactLogo';
+import LogoSvg from '../../components/LogoSvg';
 import { GameState, Player, Card as CardType } from '../../types/game';
 import { getGameState, updateGameState, subscribeGameState, saveGameHistory } from '../../services/gameService';
 import { updateLobbyStatus } from '../../services/lobbyService';
@@ -400,6 +401,9 @@ export default function GameScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.logoWatermark}>
+        <LogoSvg width={400} height={200} opacity={0.12} />
+      </View>
       <ScrollView contentContainerStyle={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
         {gameState.currentRound && (
           <View style={styles.leadSuitContainer}>
@@ -550,14 +554,15 @@ const styles = StyleSheet.create({
   },
   logoWatermark: {
     position: 'absolute',
-    top: '35%',
+    top: '40%',
     left: '50%',
-    width: 300,
-    height: 300,
-    transform: [{ translateX: -150 }, { translateY: -150 }],
-    opacity: 0.06,
+    width: 400,
+    height: 200,
+    transform: [{ translateX: -200 }, { translateY: -100 }],
     zIndex: 0,
     pointerEvents: 'none',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -579,46 +584,48 @@ const styles = StyleSheet.create({
   },
   leadSuitContainer: {
     position: 'absolute',
-    top: 4,
-    left: '50%',
-    transform: [{ translateX: -40 }],
+    top: SPACING.sm,
+    right: SPACING.sm,
     zIndex: 10,
   },
   roundInfoContainer: {
     alignItems: 'center',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    marginBottom: SPACING.sm,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: 'rgba(226, 178, 58, 0.35)',
-    ...SHADOWS.small,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.xl,
+    marginBottom: SPACING.md,
+    marginHorizontal: SPACING.md,
+    backgroundColor: 'rgba(4, 43, 18, 0.9)',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: COLORS.gold,
+    ...SHADOWS.medium,
+    maxWidth: 500,
+    alignSelf: 'center',
   },
   roundText: {
-    fontSize: FONT_SIZES.xxl,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '800',
     color: COLORS.text,
-    letterSpacing: 0.5,
+    letterSpacing: 1,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xl,
+    fontSize: 24,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.sm,
-    color: COLORS.gold,
+    fontSize: 16,
+    color: COLORS.goldLight,
     fontStyle: 'italic',
-    marginTop: SPACING.xs,
+    marginTop: SPACING.sm,
     fontWeight: '600',
     textAlign: 'center',
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: 14,
   },
   playersContainer: {
     flexDirection: 'row',
@@ -663,8 +670,8 @@ const styles = StyleSheet.create({
   },
   handContainer: {
     marginTop: 'auto',
-    marginBottom: SPACING.sm,
-    minHeight: 120,
+    marginBottom: SPACING.md,
+    minHeight: 140,
   },
   handContainerSingle: {
     justifyContent: 'center',
@@ -679,17 +686,17 @@ const styles = StyleSheet.create({
   },
   hand: {
     flexDirection: 'row',
-    gap: SPACING.xs,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
+    gap: SPACING.sm,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     alignItems: 'center',
   },
   handSingle: {
     justifyContent: 'center',
   },
   cardWrapper: {
-    minWidth: 40,
-    minHeight: 40,
+    minWidth: 44,
+    minHeight: 44,
   },
   cardWrapperSingle: {
     shadowColor: '#E2B23A',

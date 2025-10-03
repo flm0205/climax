@@ -37,12 +37,12 @@ export default function PlayerSlot({
         Animated.sequence([
           Animated.timing(glowAnim, {
             toValue: 1,
-            duration: 1200,
+            duration: 1000,
             useNativeDriver: false,
           }),
           Animated.timing(glowAnim, {
             toValue: 0,
-            duration: 1200,
+            duration: 1000,
             useNativeDriver: false,
           }),
         ])
@@ -51,13 +51,13 @@ export default function PlayerSlot({
       Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
-            toValue: 1.05,
-            duration: 1200,
+            toValue: 1.03,
+            duration: 1000,
             useNativeDriver: true,
           }),
           Animated.timing(pulseAnim, {
             toValue: 1,
-            duration: 1200,
+            duration: 1000,
             useNativeDriver: true,
           }),
         ])
@@ -70,12 +70,12 @@ export default function PlayerSlot({
 
   const borderColor = glowAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [COLORS.gold, COLORS.goldLight],
+    outputRange: [COLORS.goldLight, '#FFF9E3'],
   });
 
   const shadowRadius = glowAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [8, 16],
+    outputRange: [12, 20],
   });
 
   const avatarColors = isCurrentPlayer
@@ -137,56 +137,60 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    backgroundColor: 'rgba(4, 43, 18, 0.85)',
     paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.sm,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: 'rgba(226, 178, 58, 0.25)',
-    minWidth: 160,
-    ...SHADOWS.small,
+    paddingHorizontal: SPACING.md,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: COLORS.gold,
+    minWidth: 180,
+    minHeight: 72,
+    ...SHADOWS.medium,
   },
   compactContainer: {
     paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.xs,
-    borderRadius: 12,
-    minWidth: 140,
+    paddingHorizontal: SPACING.sm,
+    borderRadius: 14,
+    minWidth: 160,
+    minHeight: 64,
   },
   mobileContainer: {
     paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.xs,
-    minWidth: 145,
+    paddingHorizontal: SPACING.sm,
+    minWidth: 165,
+    minHeight: 64,
   },
   currentTurn: {
-    borderColor: COLORS.gold,
-    borderWidth: 2,
-    backgroundColor: 'rgba(226, 178, 58, 0.15)',
-    shadowColor: '#E2B23A',
+    borderColor: COLORS.goldLight,
+    borderWidth: 3,
+    backgroundColor: 'rgba(226, 178, 58, 0.25)',
+    shadowColor: COLORS.gold,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.7,
-    shadowRadius: 12,
-    elevation: 12,
+    shadowOpacity: 0.9,
+    shadowRadius: 16,
+    elevation: 15,
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: SPACING.sm,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
+    marginRight: SPACING.md,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    ...SHADOWS.small,
   },
   avatarCompact: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: SPACING.xs,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    marginRight: SPACING.sm,
   },
   avatarMobile: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
   },
   avatarText: {
     color: COLORS.text,
@@ -207,52 +211,52 @@ const styles = StyleSheet.create({
   },
   name: {
     color: COLORS.text,
-    fontSize: FONT_SIZES.md,
-    fontWeight: '600',
-    marginBottom: 2,
-    letterSpacing: 0.3,
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 3,
+    letterSpacing: 0.5,
   },
   nameCompact: {
-    fontSize: FONT_SIZES.sm,
-    marginBottom: 1,
+    fontSize: 14,
+    marginBottom: 2,
   },
   nameMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: 14,
   },
   score: {
     color: COLORS.textSecondary,
-    fontSize: FONT_SIZES.sm,
+    fontSize: 14,
     fontWeight: '500',
   },
   scoreCompact: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: 13,
   },
   scoreMobile: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: 13,
   },
   bet: {
     color: COLORS.gold,
-    fontSize: FONT_SIZES.md,
+    fontSize: 15,
     fontWeight: '700',
-    marginTop: 1,
+    marginTop: 2,
   },
   betCompact: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: 14,
   },
   betMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: 14,
   },
   tricks: {
     color: COLORS.success,
-    fontSize: FONT_SIZES.md,
+    fontSize: 15,
     fontWeight: '700',
-    marginTop: 1,
+    marginTop: 2,
   },
   tricksCompact: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: 14,
   },
   tricksMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: 14,
   },
   disconnected: {
     color: COLORS.warning,

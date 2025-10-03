@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions, Image, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
 import CompactLogo from '../components/CompactLogo';
+import LogoSvg from '../components/LogoSvg';
 import { GameState, Player, Card as CardType } from '../types/game';
 import { loadOfflineGame, updateOfflineGame, endOfflineGame } from '../services/offlineGameService';
 import Card from '../components/Card';
@@ -283,7 +284,8 @@ export default function OfflineGameScreen() {
   };
 
   const { width, height } = useWindowDimensions();
-  const isSmallScreen = width < 400;
+  const isSmallScreen = width < 450;
+  const isPortrait = height > width;
   const isShortScreen = height < 700;
   const currentPlayer = gameState?.players.find((p) => p.id === playerId);
   const isOneCard = gameState?.currentRound ? isOneCardRound(gameState.currentRound.cardsPerPlayer) : false;
@@ -334,6 +336,9 @@ export default function OfflineGameScreen() {
 
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
+      <View style={styles.logoWatermark}>
+        <LogoSvg width={400} height={200} opacity={0.12} />
+      </View>
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
           {gameState.currentRound && (
@@ -561,14 +566,15 @@ const styles = StyleSheet.create({
   },
   logoWatermark: {
     position: 'absolute',
-    top: '35%',
+    top: '40%',
     left: '50%',
-    width: 300,
-    height: 300,
-    transform: [{ translateX: -150 }, { translateY: -150 }],
-    opacity: 0.06,
+    width: 400,
+    height: 200,
+    transform: [{ translateX: -200 }, { translateY: -100 }],
     zIndex: 0,
     pointerEvents: 'none',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -588,79 +594,87 @@ const styles = StyleSheet.create({
   },
   leadSuitContainer: {
     position: 'absolute',
-    top: 4,
-    left: '50%',
-    transform: [{ translateX: -40 }],
+    top: SPACING.sm,
+    right: SPACING.sm,
     zIndex: 10,
   },
   roundInfoContainer: {
     alignItems: 'center',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    marginBottom: SPACING.sm,
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: 'rgba(226, 178, 58, 0.35)',
-    ...SHADOWS.small,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.xl,
+    marginBottom: SPACING.md,
+    marginHorizontal: SPACING.md,
+    backgroundColor: 'rgba(4, 43, 18, 0.9)',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: COLORS.gold,
+    ...SHADOWS.medium,
+    maxWidth: 500,
+    alignSelf: 'center',
   },
   roundText: {
-    fontSize: FONT_SIZES.xxl,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '800',
     color: COLORS.text,
-    letterSpacing: 0.5,
+    letterSpacing: 1,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    textShadowColor: 'rgba(0, 0, 0, 0.8)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xl,
+    fontSize: 24,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.sm,
-    color: COLORS.gold,
+    fontSize: 16,
+    color: COLORS.goldLight,
     fontStyle: 'italic',
-    marginTop: SPACING.xs,
+    marginTop: SPACING.sm,
     fontWeight: '600',
     textAlign: 'center',
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: 14,
   },
   tableLayout: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: SPACING.xs,
   },
   opponentTop: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: SPACING.sm,
-    paddingVertical: SPACING.xs,
-    paddingHorizontal: SPACING.xs,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.sm,
     marginBottom: SPACING.md,
+    width: '100%',
   },
   tableSides: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: SPACING.md,
-    paddingHorizontal: 4,
-  },
-  opponentLeft: {
-    paddingLeft: 4,
-  },
-  opponentRight: {
-    paddingRight: 4,
-  },
-  centerPlayArea: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: SPACING.md,
     paddingHorizontal: SPACING.sm,
+    width: '100%',
+    maxWidth: 800,
+  },
+  opponentLeft: {
+    position: 'absolute',
+    left: SPACING.sm,
+  },
+  opponentRight: {
+    position: 'absolute',
+    right: SPACING.sm,
+  },
+  centerPlayArea: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 200,
+    maxWidth: 400,
   },
   trickArea: {
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
@@ -679,8 +693,9 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   playerBottom: {
-    paddingVertical: SPACING.xs,
+    paddingVertical: SPACING.sm,
     alignItems: 'center',
+    width: '100%',
   },
   trickCards: {
     flexDirection: 'row',
@@ -697,8 +712,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   handContainer: {
-    paddingVertical: SPACING.sm,
-    minHeight: 120,
+    paddingVertical: SPACING.md,
+    minHeight: 140,
   },
   handContainerSingle: {
     justifyContent: 'center',
@@ -706,8 +721,8 @@ const styles = StyleSheet.create({
   },
   hand: {
     flexDirection: 'row',
-    gap: SPACING.xs,
-    paddingHorizontal: SPACING.md,
+    gap: SPACING.sm,
+    paddingHorizontal: SPACING.lg,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -715,8 +730,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardWrapper: {
-    minWidth: 40,
-    minHeight: 40,
+    minWidth: 44,
+    minHeight: 44,
   },
   cardWrapperSingle: {
     shadowColor: '#E2B23A',
