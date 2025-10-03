@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Alert, Share, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Alert, Share, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../../constants/theme';
+import { COLORS, SPACING, FONT_SIZES } from '../../constants/theme';
 import Button from '../../components/Button';
 import { getLobbyPlayers, subscribeLobbyPlayers, subscribeLobbyStatus, updateLobbyStatus, getLobbyById } from '../../services/lobbyService';
 import { createGame, getGameByLobby } from '../../services/gameService';
@@ -536,16 +535,10 @@ export default function LobbyScreen() {
   };
 
   return (
-    <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.content}>
-          <Image
-            source={require('../../assets/images/ChatGPT Image Oct 3, 2025, 08_50_05 PM.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Text style={styles.title}>Lobby</Text>
-          <Text style={styles.code}>{code}</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Lobby</Text>
+        <Text style={styles.code}>{code}</Text>
 
         <View style={styles.statusContainer}>
           <View style={[styles.statusDot, { backgroundColor: getStatusColor() }]} />
@@ -611,47 +604,34 @@ export default function LobbyScreen() {
           <Button title="Leave Lobby" onPress={() => router.back()} variant="secondary" />
         </View>
       </ScrollView>
-      </SafeAreaView>
-    </LinearGradient>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  safeArea: {
-    flex: 1,
+    backgroundColor: COLORS.background,
   },
   content: {
     flexGrow: 1,
     padding: SPACING.xl,
     justifyContent: 'center',
   },
-  logo: {
-    width: 160,
-    height: 100,
-    alignSelf: 'center',
-    marginBottom: SPACING.md,
-    opacity: 0.85,
-  },
   title: {
-    fontSize: FONT_SIZES.xl,
-    fontWeight: '600',
-    color: COLORS.textSecondary,
+    fontSize: FONT_SIZES.xxxl,
+    fontWeight: '700',
+    color: COLORS.text,
     textAlign: 'center',
     marginBottom: SPACING.sm,
   },
   code: {
     fontSize: FONT_SIZES.xxl,
-    fontWeight: '800',
-    color: COLORS.gold,
+    fontWeight: '700',
+    color: COLORS.accent,
     textAlign: 'center',
     letterSpacing: 4,
     marginBottom: SPACING.md,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
   },
   statusContainer: {
     flexDirection: 'row',
@@ -712,25 +692,22 @@ const styles = StyleSheet.create({
   playerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(15, 61, 46, 0.5)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     padding: SPACING.md,
     borderRadius: 12,
     marginBottom: SPACING.sm,
-    borderWidth: 1,
-    borderColor: COLORS.highlight,
-    ...SHADOWS.small,
   },
   playerAvatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: COLORS.gold,
+    backgroundColor: COLORS.accent,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: SPACING.md,
   },
   playerAvatarText: {
-    color: COLORS.primaryDark,
+    color: COLORS.text,
     fontSize: FONT_SIZES.xl,
     fontWeight: '700',
   },
@@ -744,7 +721,7 @@ const styles = StyleSheet.create({
   },
   hostBadge: {
     fontSize: FONT_SIZES.sm,
-    color: COLORS.gold,
+    color: COLORS.warning,
     fontWeight: '600',
     marginTop: SPACING.xs,
   },
@@ -756,8 +733,7 @@ const styles = StyleSheet.create({
   emptySlot: {
     padding: SPACING.lg,
     borderWidth: 2,
-    borderColor: COLORS.highlight,
-    backgroundColor: 'rgba(15, 61, 46, 0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 12,
     borderStyle: 'dashed',
     alignItems: 'center',

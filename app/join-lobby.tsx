@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
+import { COLORS, SPACING, FONT_SIZES } from '../constants/theme';
 import Button from '../components/Button';
 import { joinLobby } from '../services/lobbyService';
 
@@ -37,15 +36,9 @@ export default function JoinLobbyScreen() {
   };
 
   return (
-    <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.content}>
-          <Image
-            source={require('../assets/images/ChatGPT Image Oct 3, 2025, 08_50_05 PM.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Text style={styles.title}>Join Lobby</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Join Lobby</Text>
 
         <View style={styles.form}>
           <Text style={styles.label}>Your Name</Text>
@@ -75,39 +68,26 @@ export default function JoinLobbyScreen() {
           <Button title="Back" onPress={() => router.back()} variant="outline" />
         </View>
       </View>
-      </SafeAreaView>
-    </LinearGradient>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  safeArea: {
-    flex: 1,
+    backgroundColor: COLORS.background,
   },
   content: {
     flex: 1,
     padding: SPACING.xl,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logo: {
-    width: 200,
-    height: 140,
-    marginBottom: SPACING.lg,
-    opacity: 0.9,
   },
   title: {
     fontSize: FONT_SIZES.xxxl,
     fontWeight: '700',
-    color: COLORS.gold,
+    color: COLORS.text,
     textAlign: 'center',
     marginBottom: SPACING.xxl,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
   },
   form: {
     width: '100%',
@@ -121,22 +101,20 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.sm,
   },
   input: {
-    backgroundColor: 'rgba(15, 61, 46, 0.4)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 2,
-    borderColor: COLORS.highlight,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 12,
     padding: SPACING.md,
     fontSize: FONT_SIZES.md,
     color: COLORS.text,
     marginBottom: SPACING.lg,
-    ...SHADOWS.small,
   },
   codeInput: {
     fontSize: FONT_SIZES.xl,
     fontWeight: '700',
     textAlign: 'center',
     letterSpacing: 4,
-    color: COLORS.gold,
   },
   joinButton: {
     marginBottom: SPACING.md,
