@@ -405,17 +405,18 @@ export default function GameScreen() {
         <LogoSvg width={400} height={200} opacity={0.12} />
       </View>
       <ScrollView contentContainerStyle={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
-        {gameState.currentRound && (
-          <View style={styles.leadSuitContainer}>
-            <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
+        <View style={[styles.topSection, isSmallScreen && styles.topSectionMobile]}>
+          <View style={styles.roundInfoContainer}>
+            <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
+              Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
+            </Text>
+            {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
           </View>
-        )}
-
-        <View style={styles.roundInfoContainer}>
-          <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
-            Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
-          </Text>
-          {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
+          {gameState.currentRound && (
+            <View style={styles.leadSuitContainer}>
+              <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
+            </View>
+          )}
         </View>
 
         <View style={[styles.playersContainer, isSmallScreen && styles.playersContainerMobile]}>
@@ -582,26 +583,33 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingBottom: SPACING.md,
   },
+  topSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: SPACING.md,
+    paddingHorizontal: SPACING.xs,
+    gap: SPACING.xs,
+  },
+  topSectionMobile: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: SPACING.sm,
+  },
   leadSuitContainer: {
-    position: 'absolute',
-    top: SPACING.xs,
-    right: SPACING.xs,
-    zIndex: 10,
+    flexShrink: 0,
   },
   roundInfoContainer: {
     alignItems: 'center',
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.lg,
-    marginBottom: SPACING.md,
-    marginTop: SPACING.xs,
-    marginHorizontal: SPACING.md,
     backgroundColor: 'rgba(4, 43, 18, 0.9)',
     borderRadius: 16,
     borderWidth: 2,
     borderColor: COLORS.gold,
     ...SHADOWS.medium,
+    flex: 1,
     maxWidth: 500,
-    alignSelf: 'center',
   },
   roundText: {
     fontSize: 28,
@@ -632,16 +640,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    alignItems: 'center',
     gap: SPACING.sm,
     marginBottom: SPACING.md,
-    paddingHorizontal: SPACING.xs,
+    paddingHorizontal: SPACING.sm,
     maxWidth: 900,
     alignSelf: 'center',
   },
   playersContainerMobile: {
     gap: SPACING.xs,
     marginBottom: SPACING.sm,
-    paddingHorizontal: 2,
+    paddingHorizontal: SPACING.xs,
+    rowGap: SPACING.xs,
   },
   trickArea: {
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
