@@ -510,7 +510,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: SPACING.sm,
     marginBottom: SPACING.lg,
-    paddingHorizontal: SPACING.xs,
+    paddingHorizontal: SPACING.sm,
+    paddingTop: SPACING.sm,
   },
   trickArea: {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
