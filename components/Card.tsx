@@ -211,14 +211,14 @@ function getSuitSymbol(suit: string): string {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: CARD_DIMENSIONS.borderRadius + 2,
+    borderRadius: CARD_DIMENSIONS.borderRadius,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
     ...SHADOWS.card,
   },
   cardImage: {
-    borderRadius: CARD_DIMENSIONS.borderRadius + 2,
+    borderRadius: CARD_DIMENSIONS.borderRadius,
   },
   cardBorder: {
     position: 'absolute',
@@ -226,10 +226,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    borderWidth: 3,
+    borderWidth: 2.5,
     borderColor: COLORS.cardBorder,
     borderRadius: CARD_DIMENSIONS.borderRadius,
-    opacity: 0.6,
+    opacity: 0.8,
   },
   cardFace: {
     flex: 1,

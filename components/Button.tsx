@@ -44,13 +44,13 @@ export default function Button({
   const getGradientColors = () => {
     switch (variant) {
       case 'primary':
-        return COLORS.accentGradient;
+        return COLORS.greenGradient;
       case 'secondary':
-        return COLORS.primaryGradient;
+        return COLORS.accentGradient;
       case 'outline':
         return ['transparent', 'transparent'];
       default:
-        return COLORS.accentGradient;
+        return COLORS.greenGradient;
     }
   };
 
@@ -88,45 +88,49 @@ export default function Button({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    borderRadius: 14,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.xl,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 54,
+    minHeight: 56,
   },
   primary: {
-    borderWidth: 0,
+    borderWidth: 2,
+    borderColor: COLORS.gold,
   },
   secondary: {
-    borderWidth: 0,
-  },
-  outline: {
-    backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: COLORS.accent,
   },
+  outline: {
+    backgroundColor: 'rgba(226, 178, 58, 0.05)',
+    borderWidth: 2,
+    borderColor: COLORS.gold,
+  },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.4,
   },
   text: {
     fontSize: FONT_SIZES.md,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   primaryText: {
     color: COLORS.text,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    textShadowRadius: 3,
   },
   secondaryText: {
     color: COLORS.text,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    textShadowRadius: 3,
   },
   outlineText: {
-    color: COLORS.accent,
+    color: COLORS.gold,
+    fontWeight: '700',
   },
 });
