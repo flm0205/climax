@@ -34,7 +34,6 @@ export default function HomeScreen() {
                 resizeMode="contain"
               />
             </View>
-            <Text style={styles.subtitle}>Italian Card Game</Text>
 
             <View style={styles.statusBadge}>
               <View style={[styles.statusIndicator, isOnline ? styles.statusOnline : styles.statusOffline]} />
@@ -148,14 +147,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 280,
     height: 200,
-  },
-  subtitle: {
-    fontSize: FONT_SIZES.lg,
-    color: COLORS.gold,
-    fontStyle: 'italic',
-    letterSpacing: 2,
     marginBottom: SPACING.md,
-    fontWeight: '600',
   },
   statusBadge: {
     flexDirection: 'row',
