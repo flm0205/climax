@@ -23,18 +23,27 @@ export default function PlayerSlot({
   showCard = false,
   isCurrentPlayer = false,
 }: PlayerSlotProps) {
+  const isCompact = position === 'top';
+
   return (
-    <View style={[styles.container, isCurrentTurn && styles.currentTurn]}>
-      <View style={styles.avatar}>
-        <Text style={styles.avatarText}>{player.name.charAt(0).toUpperCase()}</Text>
+    <View style={[
+      styles.container,
+      isCompact && styles.compactContainer,
+      isCurrentTurn && styles.currentTurn,
+      isCurrentTurn && isCompact && styles.currentTurnCompact
+    ]}>
+      <View style={[styles.avatar, isCompact && styles.avatarCompact]}>
+        <Text style={[styles.avatarText, isCompact && styles.avatarTextCompact]}>
+          {player.name.charAt(0).toUpperCase()}
+        </Text>
       </View>
       <View style={styles.info}>
-        <Text style={styles.name} numberOfLines={1}>
+        <Text style={[styles.name, isCompact && styles.nameCompact]} numberOfLines={1}>
           {player.name}
         </Text>
-        <Text style={styles.score}>Score: {player.score}</Text>
-        {showBet && player.currentBet !== null && <Text style={styles.bet}>Bet: {player.currentBet}</Text>}
-        {showTricks && <Text style={styles.tricks}>Tricks: {player.tricksWon}</Text>}
+        <Text style={[styles.score, isCompact && styles.scoreCompact]}>Score: {player.score}</Text>
+        {showBet && player.currentBet !== null && <Text style={[styles.bet, isCompact && styles.betCompact]}>Bet: {player.currentBet}</Text>}
+        {showTricks && <Text style={[styles.tricks, isCompact && styles.tricksCompact]}>Tricks: {player.tricksWon}</Text>}
         {!player.isConnected && <Text style={styles.disconnected}>Disconnected</Text>}
       </View>
       {showCard && player.hand.length > 0 && (
@@ -58,11 +67,20 @@ const styles = StyleSheet.create({
     minWidth: 150,
     ...SHADOWS.small,
   },
+  compactContainer: {
+    padding: SPACING.sm,
+    borderRadius: 10,
+    minWidth: 130,
+    maxWidth: 140,
+  },
   currentTurn: {
     borderColor: COLORS.gold,
     borderWidth: 3,
     backgroundColor: 'rgba(226, 178, 58, 0.15)',
     ...SHADOWS.goldGlow,
+  },
+  currentTurnCompact: {
+    borderWidth: 2,
   },
   avatar: {
     width: 40,
@@ -73,10 +91,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: SPACING.sm,
   },
+  avatarCompact: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: SPACING.xs,
+  },
   avatarText: {
     color: COLORS.text,
     fontSize: FONT_SIZES.lg,
     fontWeight: '700',
+  },
+  avatarTextCompact: {
+    fontSize: FONT_SIZES.md,
   },
   info: {
     flex: 1,
@@ -87,19 +114,32 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 2,
   },
+  nameCompact: {
+    fontSize: FONT_SIZES.sm,
+    marginBottom: 1,
+  },
   score: {
     color: COLORS.textSecondary,
     fontSize: FONT_SIZES.sm,
+  },
+  scoreCompact: {
+    fontSize: FONT_SIZES.xs,
   },
   bet: {
     color: COLORS.gold,
     fontSize: FONT_SIZES.sm,
     fontWeight: '600',
   },
+  betCompact: {
+    fontSize: FONT_SIZES.xs,
+  },
   tricks: {
     color: COLORS.success,
     fontSize: FONT_SIZES.sm,
     fontWeight: '600',
+  },
+  tricksCompact: {
+    fontSize: FONT_SIZES.xs,
   },
   disconnected: {
     color: COLORS.warning,

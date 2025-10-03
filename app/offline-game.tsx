@@ -571,9 +571,12 @@ const styles = StyleSheet.create({
   },
   opponentTop: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: SPACING.sm,
-    paddingVertical: SPACING.sm,
+    justifyContent: 'space-evenly',
+    gap: SPACING.xs,
+    paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.xs,
+    maxWidth: '70%',
+    alignSelf: 'center',
   },
   tableSides: {
     flex: 1,
