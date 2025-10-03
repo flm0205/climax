@@ -33,7 +33,6 @@ export default function HomeScreen() {
             <View style={styles.logoContainer}>
               <CompactLogo size="large" />
             </View>
-            <Text style={styles.tagline}>The Original Italian Trick-Taking Card Game</Text>
 
             <View style={styles.statusBadge}>
               <View style={[styles.statusIndicator, isOnline ? styles.statusOnline : styles.statusOffline]} />
@@ -180,17 +179,8 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xxxl,
   },
   logoContainer: {
-    marginBottom: SPACING.lg,
+    marginBottom: SPACING.xxl,
     alignItems: 'center',
-  },
-  tagline: {
-    fontSize: FONT_SIZES.md,
-    color: COLORS.textBeige,
-    fontStyle: 'italic',
-    letterSpacing: 1,
-    marginBottom: SPACING.xl,
-    textAlign: 'center',
-    paddingHorizontal: SPACING.xl,
   },
   statusBadge: {
     flexDirection: 'row',

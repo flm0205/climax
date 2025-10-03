@@ -334,6 +334,9 @@ export default function OfflineGameScreen() {
 
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
+      <View style={styles.logoWatermark}>
+        <CompactLogo size="large" />
+      </View>
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
           {gameState.currentRound && (
@@ -557,6 +560,16 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    zIndex: 1,
+  },
+  logoWatermark: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -100 }, { translateY: -50 }],
+    opacity: 0.12,
+    zIndex: 0,
+    pointerEvents: 'none',
   },
   loadingContainer: {
     flex: 1,
@@ -576,23 +589,29 @@ const styles = StyleSheet.create({
   },
   leadSuitContainer: {
     position: 'absolute',
-    top: SPACING.sm,
-    left: SPACING.sm,
+    top: 0,
+    left: '50%',
+    transform: [{ translateX: -40 }],
     zIndex: 10,
   },
   roundInfoContainer: {
     alignItems: 'center',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.xl,
     marginBottom: SPACING.md,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: 'rgba(226, 178, 58, 0.4)',
+    ...SHADOWS.medium,
   },
   roundText: {
     fontSize: FONT_SIZES.xxxl,
-    fontWeight: '700',
-    color: COLORS.gold,
+    fontWeight: '800',
+    color: COLORS.text,
     letterSpacing: 1,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
@@ -600,35 +619,37 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.xxl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.lg,
+    fontSize: FONT_SIZES.md,
     color: COLORS.gold,
     fontStyle: 'italic',
-    marginTop: SPACING.xs,
+    marginTop: SPACING.sm,
     fontWeight: '600',
     textAlign: 'center',
+    letterSpacing: 0.5,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
   },
   tableLayout: {
     flex: 1,
-    justifyContent: 'space-between',
-    paddingVertical: SPACING.xs,
+    justifyContent: 'center',
+    paddingVertical: SPACING.md,
   },
   opponentTop: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    gap: SPACING.xs,
-    paddingVertical: SPACING.xs,
-    paddingHorizontal: SPACING.xs,
-    maxWidth: '80%',
-    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: SPACING.md,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.sm,
+    marginBottom: SPACING.lg,
   },
   tableSides: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginVertical: SPACING.lg,
+    paddingHorizontal: SPACING.sm,
   },
   opponentLeft: {
     paddingLeft: SPACING.sm,
