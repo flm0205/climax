@@ -725,9 +725,10 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: COLORS.overlay,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     padding: SPACING.xl,
+    paddingTop: 120,
   },
   modalOverlayTransparent: {
     backgroundColor: 'transparent',
