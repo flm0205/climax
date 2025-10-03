@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
@@ -50,58 +60,71 @@ export default function OfflineSetupScreen() {
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Play vs AI</Text>
-          <Text style={styles.description}>Challenge computer opponents offline</Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.keyboardAvoiding}
+        >
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.content}>
+              <Text style={styles.title}>Play vs AI</Text>
+              <Text style={styles.description}>Challenge computer opponents offline</Text>
 
-          <View style={styles.form}>
-            <Text style={styles.label}>Your Name</Text>
-            <TextInput
-              style={styles.input}
-              value={playerName}
-              onChangeText={setPlayerName}
-              placeholder="Enter your name"
-              placeholderTextColor={COLORS.textMuted}
-              maxLength={20}
-              autoFocus
-            />
-
-            <Text style={styles.label}>Number of Players</Text>
-            <View style={styles.playerCountContainer}>
-              {[2, 3, 4, 5, 6].map((count) => (
-                <Button
-                  key={count}
-                  title={count.toString()}
-                  onPress={() => setNumPlayers(count)}
-                  variant={numPlayers === count ? 'primary' : 'outline'}
-                  style={styles.playerButton}
+              <View style={styles.form}>
+                <Text style={styles.label}>Your Name</Text>
+                <TextInput
+                  style={styles.input}
+                  value={playerName}
+                  onChangeText={setPlayerName}
+                  placeholder="Enter your name"
+                  placeholderTextColor={COLORS.textMuted}
+                  maxLength={20}
+                  autoFocus
                 />
-              ))}
+
+                <Text style={styles.label}>Number of Players</Text>
+                <View style={styles.playerCountContainer}>
+                  {[2, 3, 4, 5, 6].map((count) => (
+                    <Button
+                      key={count}
+                      title={count.toString()}
+                      onPress={() => setNumPlayers(count)}
+                      variant={numPlayers === count ? 'primary' : 'outline'}
+                      style={styles.playerButton}
+                    />
+                  ))}
+                </View>
+
+                <View style={styles.aiInfo}>
+                  <LinearGradient
+                    colors={['rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0.03)'] as any}
+                    style={styles.aiInfoGradient}
+                  >
+                    <Text style={styles.aiInfoText}>
+                      You'll play against {numPlayers - 1} AI opponent{numPlayers > 2 ? 's' : ''}
+                    </Text>
+                    <Text style={styles.aiInfoSubtext}>
+                      AI players have different strategies and difficulty levels
+                    </Text>
+                  </LinearGradient>
+                </View>
+
+                <Button
+                  title="Start Game"
+                  onPress={handleStartGame}
+                  loading={loading}
+                  disabled={loading || !playerName.trim()}
+                  style={styles.startButton}
+                />
+
+                <Button title="Back to Menu" onPress={() => router.back()} variant="outline" />
+              </View>
             </View>
-
-            <View style={styles.aiInfo}>
-              <LinearGradient
-                colors={['rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0.03)'] as any}
-                style={styles.aiInfoGradient}
-              >
-                <Text style={styles.aiInfoText}>
-                  You'll play against {numPlayers - 1} AI opponent{numPlayers > 2 ? 's' : ''}
-                </Text>
-                <Text style={styles.aiInfoSubtext}>AI players have different strategies and difficulty levels</Text>
-              </LinearGradient>
-            </View>
-
-            <Button
-              title="Start Game"
-              onPress={handleStartGame}
-              loading={loading}
-              disabled={loading || !playerName.trim()}
-              style={styles.startButton}
-            />
-
-            <Button title="Back to Menu" onPress={() => router.back()} variant="outline" />
-          </View>
-        </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -114,9 +137,17 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  keyboardAvoiding: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: SPACING.xl,
+    paddingBottom: SPACING.xxl,
+    justifyContent: 'center',
+  },
   content: {
     flex: 1,
-    padding: SPACING.xl,
     justifyContent: 'center',
   },
   title: {
