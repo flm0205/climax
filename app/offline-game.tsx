@@ -495,7 +495,7 @@ export default function OfflineGameScreen() {
           transparent
           animationType="fade"
         >
-          <View style={[styles.modalOverlay, bettingWheelMinimized && styles.modalOverlayTransparent]}>
+          <View style={[styles.bettingModalOverlay, bettingWheelMinimized && styles.modalOverlayTransparent]}>
             {gameState.currentRound && !bettingWheelMinimized && (
               <BettingWheel
                 maxBet={gameState.currentRound.cardsPerPlayer}
@@ -725,10 +725,17 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: COLORS.overlay,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: SPACING.xl,
-    paddingTop: 120,
+  },
+  bettingModalOverlay: {
+    flex: 1,
+    backgroundColor: COLORS.overlay,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: SPACING.md,
+    paddingBottom: SPACING.xxl,
   },
   modalOverlayTransparent: {
     backgroundColor: 'transparent',
