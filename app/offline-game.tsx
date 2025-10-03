@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
 import CompactLogo from '../components/CompactLogo';
+import LogoSvg from '../components/LogoSvg';
 import { GameState, Player, Card as CardType } from '../types/game';
 import { loadOfflineGame, updateOfflineGame, endOfflineGame } from '../services/offlineGameService';
 import Card from '../components/Card';
@@ -334,24 +335,23 @@ export default function OfflineGameScreen() {
 
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
-      <Image
-        source={require('../assets/images/Logo_Transparent.png')}
-        style={styles.logoWatermark}
-        resizeMode="contain"
-      />
+      <View style={styles.logoWatermark}>
+        <LogoSvg width={300} height={150} opacity={0.08} />
+      </View>
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
-          {gameState.currentRound && (
-            <View style={styles.leadSuitContainer}>
-              <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
+          <View style={styles.headerBar}>
+            <View style={styles.roundInfoContainer}>
+              <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
+                Round {gameState.currentSequenceIndex + 1}
+              </Text>
+              {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
             </View>
-          )}
-
-          <View style={styles.roundInfoContainer}>
-            <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
-              Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
-            </Text>
-            {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
+            {gameState.currentRound && (
+              <View style={styles.leadSuitContainer}>
+                <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
+              </View>
+            )}
           </View>
 
           <View style={styles.tableLayout}>
@@ -566,12 +566,9 @@ const styles = StyleSheet.create({
   },
   logoWatermark: {
     position: 'absolute',
-    top: '35%',
+    top: '40%',
     left: '50%',
-    width: 350,
-    height: 350,
-    transform: [{ translateX: -175 }, { translateY: -175 }],
-    opacity: 0.08,
+    transform: [{ translateX: -150 }, { translateY: -75 }],
     zIndex: 0,
     pointerEvents: 'none',
   },
@@ -586,102 +583,106 @@ const styles = StyleSheet.create({
   },
   gameContent: {
     flex: 1,
-    padding: SPACING.sm,
+    padding: SPACING.md,
   },
   gameContentCompact: {
-    padding: SPACING.xs,
+    padding: SPACING.sm,
+  },
+  headerBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SPACING.lg,
+    paddingHorizontal: SPACING.md,
+    gap: SPACING.md,
   },
   leadSuitContainer: {
-    position: 'absolute',
-    top: 0,
-    left: '50%',
-    transform: [{ translateX: -40 }],
-    zIndex: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 12,
+    padding: SPACING.sm,
+    borderWidth: 2,
+    borderColor: 'rgba(226, 178, 58, 0.3)',
   },
   roundInfoContainer: {
-    alignItems: 'center',
-    paddingVertical: SPACING.lg,
-    paddingHorizontal: SPACING.xl,
-    marginBottom: SPACING.md,
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 16,
+    borderRadius: 12,
     borderWidth: 2,
-    borderColor: 'rgba(226, 178, 58, 0.4)',
-    ...SHADOWS.medium,
+    borderColor: 'rgba(226, 178, 58, 0.3)',
   },
   roundText: {
-    fontSize: FONT_SIZES.xxxl,
-    fontWeight: '800',
+    fontSize: FONT_SIZES.xxl,
+    fontWeight: '700',
     color: COLORS.text,
-    letterSpacing: 1,
-    textAlign: 'center',
+    letterSpacing: 0.5,
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xxl,
+    fontSize: FONT_SIZES.xl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     color: COLORS.gold,
     fontStyle: 'italic',
-    marginTop: SPACING.sm,
-    fontWeight: '600',
-    textAlign: 'center',
-    letterSpacing: 0.5,
+    marginTop: SPACING.xs,
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xs,
   },
   tableLayout: {
     flex: 1,
-    justifyContent: 'center',
-    paddingVertical: SPACING.md,
+    justifyContent: 'space-between',
+    paddingVertical: SPACING.sm,
   },
   opponentTop: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: SPACING.md,
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.sm,
-    marginBottom: SPACING.lg,
+    gap: SPACING.lg,
+    paddingVertical: SPACING.xs,
+    marginBottom: SPACING.sm,
   },
   tableSides: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: SPACING.lg,
-    paddingHorizontal: SPACING.sm,
+    flex: 1,
   },
   opponentLeft: {
-    paddingLeft: SPACING.sm,
+    width: 130,
   },
   opponentRight: {
-    paddingRight: SPACING.sm,
+    width: 130,
   },
   centerPlayArea: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: SPACING.md,
+    paddingHorizontal: SPACING.lg,
   },
   trickArea: {
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 20,
-    padding: SPACING.lg,
-    borderWidth: 3,
-    borderColor: COLORS.gold,
-    minWidth: 200,
-    minHeight: 200,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 16,
+    padding: SPACING.xl,
+    borderWidth: 2,
+    borderColor: 'rgba(226, 178, 58, 0.5)',
+    minWidth: 220,
+    minHeight: 180,
     justifyContent: 'center',
     alignItems: 'center',
-    ...SHADOWS.goldGlow,
+    ...SHADOWS.medium,
   },
   playerBottom: {
-    paddingVertical: SPACING.sm,
+    paddingVertical: SPACING.xs,
     alignItems: 'center',
+    marginTop: SPACING.sm,
   },
   trickCards: {
     flexDirection: 'row',
