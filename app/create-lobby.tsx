@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Alert, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
@@ -38,62 +48,73 @@ export default function CreateLobbyScreen() {
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <Header />
-        <View style={styles.content}>
-          <Text style={styles.title}>Create Lobby</Text>
-          <Text style={styles.subtitle}>Set up a new online game</Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.keyboardAvoiding}
+        >
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.content}>
+              <Text style={styles.title}>Create Lobby</Text>
+              <Text style={styles.subtitle}>Set up a new online game</Text>
 
-          <View style={styles.form}>
-            <Input
-              label="Your Name"
-              value={playerName}
-              onChangeText={setPlayerName}
-              placeholder="Enter your name"
-              maxLength={20}
-              autoFocus
-            />
+              <View style={styles.form}>
+                <Input
+                  label="Your Name"
+                  value={playerName}
+                  onChangeText={setPlayerName}
+                  placeholder="Enter your name"
+                  maxLength={20}
+                  autoFocus
+                />
 
-            <Text style={styles.label}>Max Players</Text>
-            <View style={styles.playerCountContainer}>
-              {[2, 3, 4, 5, 6].map((count) => (
-                <TouchableOpacity
-                  key={count}
-                  onPress={() => setMaxPlayers(count)}
-                  activeOpacity={0.8}
-                  style={styles.playerButtonWrapper}
-                >
-                  <LinearGradient
-                    colors={
-                      maxPlayers === count
-                        ? COLORS.goldGradient
-                        : ['rgba(226, 178, 58, 0.1)', 'rgba(226, 178, 58, 0.05)']
-                    }
-                    style={[
-                      styles.playerButton,
-                      maxPlayers === count && styles.playerButtonSelected,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.playerButtonText,
-                        maxPlayers === count && styles.playerButtonTextSelected,
-                      ]}
+                <Text style={styles.label}>Max Players</Text>
+                <View style={styles.playerCountContainer}>
+                  {[2, 3, 4, 5, 6].map((count) => (
+                    <TouchableOpacity
+                      key={count}
+                      onPress={() => setMaxPlayers(count)}
+                      activeOpacity={0.8}
+                      style={styles.playerButtonWrapper}
                     >
-                      {count}
-                    </Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              ))}
-            </View>
+                      <LinearGradient
+                        colors={
+                          maxPlayers === count
+                            ? COLORS.goldGradient
+                            : ['rgba(226, 178, 58, 0.1)', 'rgba(226, 178, 58, 0.05)']
+                        }
+                        style={[
+                          styles.playerButton,
+                          maxPlayers === count && styles.playerButtonSelected,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.playerButtonText,
+                            maxPlayers === count && styles.playerButtonTextSelected,
+                          ]}
+                        >
+                          {count}
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  ))}
+                </View>
 
-            <Button
-              title="Create Lobby"
-              onPress={handleCreate}
-              loading={loading}
-              disabled={loading || !playerName.trim()}
-              style={styles.createButton}
-            />
-          </View>
-        </View>
+                <Button
+                  title="Create Lobby"
+                  onPress={handleCreate}
+                  loading={loading}
+                  disabled={loading || !playerName.trim()}
+                  style={styles.createButton}
+                />
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -106,10 +127,18 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  content: {
+  keyboardAvoiding: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     padding: SPACING.xl,
     paddingTop: SPACING.xxl,
+    paddingBottom: SPACING.xxl,
+    justifyContent: 'center',
+  },
+  content: {
+    flex: 1,
     justifyContent: 'center',
   },
   title: {
