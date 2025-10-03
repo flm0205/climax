@@ -334,11 +334,6 @@ export default function OfflineGameScreen() {
 
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
-      <Image
-        source={require('../assets/images/Logo_Transparent.png')}
-        style={styles.logoWatermark}
-        resizeMode="contain"
-      />
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
           {gameState.currentRound && (
@@ -453,7 +448,7 @@ export default function OfflineGameScreen() {
                   styles.hand,
                   currentPlayer.hand.length === 1 && styles.handSingle
                 ]}
-                snapToInterval={isSmallScreen ? 90 : 100}
+                snapToInterval={isSmallScreen ? 80 : 90}
                 decelerationRate="fast"
               >
                 {currentPlayer.hand.map((card) => {
@@ -568,10 +563,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '35%',
     left: '50%',
-    width: 350,
-    height: 350,
-    transform: [{ translateX: -175 }, { translateY: -175 }],
-    opacity: 0.08,
+    width: 300,
+    height: 300,
+    transform: [{ translateX: -150 }, { translateY: -150 }],
+    opacity: 0.06,
     zIndex: 0,
     pointerEvents: 'none',
   },
@@ -586,120 +581,124 @@ const styles = StyleSheet.create({
   },
   gameContent: {
     flex: 1,
-    padding: SPACING.sm,
+    padding: SPACING.xs,
   },
   gameContentCompact: {
-    padding: SPACING.xs,
+    padding: 4,
   },
   leadSuitContainer: {
     position: 'absolute',
-    top: 0,
+    top: 4,
     left: '50%',
     transform: [{ translateX: -40 }],
     zIndex: 10,
   },
   roundInfoContainer: {
     alignItems: 'center',
-    paddingVertical: SPACING.lg,
-    paddingHorizontal: SPACING.xl,
-    marginBottom: SPACING.md,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: 'rgba(226, 178, 58, 0.4)',
-    ...SHADOWS.medium,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    marginBottom: SPACING.sm,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: 'rgba(226, 178, 58, 0.35)',
+    ...SHADOWS.small,
   },
   roundText: {
-    fontSize: FONT_SIZES.xxxl,
-    fontWeight: '800',
+    fontSize: FONT_SIZES.xxl,
+    fontWeight: '700',
     color: COLORS.text,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xxl,
+    fontSize: FONT_SIZES.xl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     color: COLORS.gold,
     fontStyle: 'italic',
-    marginTop: SPACING.sm,
+    marginTop: SPACING.xs,
     fontWeight: '600',
     textAlign: 'center',
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xs,
   },
   tableLayout: {
     flex: 1,
     justifyContent: 'center',
-    paddingVertical: SPACING.md,
+    paddingVertical: SPACING.xs,
   },
   opponentTop: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: SPACING.md,
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.sm,
-    marginBottom: SPACING.lg,
+    gap: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.xs,
+    marginBottom: SPACING.md,
   },
   tableSides: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: SPACING.lg,
-    paddingHorizontal: SPACING.sm,
+    marginVertical: SPACING.md,
+    paddingHorizontal: 4,
   },
   opponentLeft: {
-    paddingLeft: SPACING.sm,
+    paddingLeft: 4,
   },
   opponentRight: {
-    paddingRight: SPACING.sm,
+    paddingRight: 4,
   },
   centerPlayArea: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: SPACING.md,
+    paddingHorizontal: SPACING.sm,
   },
   trickArea: {
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 20,
-    padding: SPACING.lg,
-    borderWidth: 3,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    borderRadius: 16,
+    padding: SPACING.md,
+    borderWidth: 2,
     borderColor: COLORS.gold,
-    minWidth: 200,
-    minHeight: 200,
+    minWidth: 160,
+    minHeight: 160,
     justifyContent: 'center',
     alignItems: 'center',
-    ...SHADOWS.goldGlow,
+    shadowColor: '#E2B23A',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 12,
+    elevation: 12,
   },
   playerBottom: {
-    paddingVertical: SPACING.sm,
+    paddingVertical: SPACING.xs,
     alignItems: 'center',
   },
   trickCards: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: SPACING.md,
+    gap: SPACING.sm,
   },
   trickCard: {
     alignItems: 'center',
   },
   trickPlayerName: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: FONT_SIZES.xs - 1,
     color: COLORS.textSecondary,
-    marginTop: SPACING.xs,
+    marginTop: 2,
   },
   handContainer: {
-    paddingVertical: SPACING.md,
-    minHeight: 140,
+    paddingVertical: SPACING.sm,
+    minHeight: 120,
   },
   handContainerSingle: {
     justifyContent: 'center',
@@ -707,8 +706,8 @@ const styles = StyleSheet.create({
   },
   hand: {
     flexDirection: 'row',
-    gap: SPACING.sm,
-    paddingHorizontal: SPACING.lg,
+    gap: SPACING.xs,
+    paddingHorizontal: SPACING.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -716,11 +715,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardWrapper: {
-    minWidth: 44,
-    minHeight: 44,
+    minWidth: 40,
+    minHeight: 40,
   },
   cardWrapperSingle: {
-    ...SHADOWS.goldGlow,
+    shadowColor: '#E2B23A',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 12,
+    elevation: 12,
   },
   modalOverlay: {
     flex: 1,

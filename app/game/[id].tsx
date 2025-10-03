@@ -400,11 +400,6 @@ export default function GameScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={require('../../assets/images/Logo_Transparent.png')}
-        style={styles.logoWatermark}
-        resizeMode="contain"
-      />
       <ScrollView contentContainerStyle={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
         {gameState.currentRound && (
           <View style={styles.leadSuitContainer}>
@@ -557,10 +552,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '35%',
     left: '50%',
-    width: 350,
-    height: 350,
-    transform: [{ translateX: -175 }, { translateY: -175 }],
-    opacity: 0.08,
+    width: 300,
+    height: 300,
+    transform: [{ translateX: -150 }, { translateY: -150 }],
+    opacity: 0.06,
     zIndex: 0,
     pointerEvents: 'none',
   },
@@ -575,74 +570,76 @@ const styles = StyleSheet.create({
   },
   gameContent: {
     flexGrow: 1,
-    padding: SPACING.sm,
-    paddingBottom: SPACING.xl,
-  },
-  gameContentCompact: {
     padding: SPACING.xs,
     paddingBottom: SPACING.lg,
   },
+  gameContentCompact: {
+    padding: 4,
+    paddingBottom: SPACING.md,
+  },
   leadSuitContainer: {
     position: 'absolute',
-    top: 0,
+    top: 4,
     left: '50%',
     transform: [{ translateX: -40 }],
     zIndex: 10,
   },
   roundInfoContainer: {
     alignItems: 'center',
-    paddingVertical: SPACING.lg,
-    paddingHorizontal: SPACING.xl,
-    marginBottom: SPACING.md,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: 'rgba(226, 178, 58, 0.4)',
-    ...SHADOWS.medium,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    marginBottom: SPACING.sm,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: 'rgba(226, 178, 58, 0.35)',
+    ...SHADOWS.small,
   },
   roundText: {
-    fontSize: FONT_SIZES.xxxl,
-    fontWeight: '800',
+    fontSize: FONT_SIZES.xxl,
+    fontWeight: '700',
     color: COLORS.text,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xxl,
+    fontSize: FONT_SIZES.xl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.sm,
     color: COLORS.gold,
     fontStyle: 'italic',
-    marginTop: SPACING.sm,
+    marginTop: SPACING.xs,
     fontWeight: '600',
     textAlign: 'center',
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xs,
   },
   playersContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: SPACING.sm,
-    marginBottom: SPACING.lg,
-    paddingHorizontal: SPACING.xs,
-  },
-  playersContainerMobile: {
     gap: SPACING.xs,
     marginBottom: SPACING.md,
+    paddingHorizontal: 4,
+  },
+  playersContainerMobile: {
+    gap: SPACING.xs - 2,
+    marginBottom: SPACING.sm,
   },
   trickArea: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
     borderRadius: 16,
-    padding: SPACING.lg,
-    marginBottom: SPACING.lg,
+    padding: SPACING.md,
+    marginBottom: SPACING.md,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.gold,
   },
   trickLabel: {
     fontSize: FONT_SIZES.md,
@@ -654,20 +651,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: SPACING.md,
+    gap: SPACING.sm,
   },
   trickCard: {
     alignItems: 'center',
   },
   trickPlayerName: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: FONT_SIZES.xs - 1,
     color: COLORS.textSecondary,
-    marginTop: SPACING.xs,
+    marginTop: 2,
   },
   handContainer: {
     marginTop: 'auto',
-    marginBottom: SPACING.md,
-    minHeight: 140,
+    marginBottom: SPACING.sm,
+    minHeight: 120,
   },
   handContainerSingle: {
     justifyContent: 'center',
@@ -682,7 +679,7 @@ const styles = StyleSheet.create({
   },
   hand: {
     flexDirection: 'row',
-    gap: SPACING.sm,
+    gap: SPACING.xs,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     alignItems: 'center',
@@ -691,11 +688,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardWrapper: {
-    minWidth: 44,
-    minHeight: 44,
+    minWidth: 40,
+    minHeight: 40,
   },
   cardWrapperSingle: {
-    ...SHADOWS.goldGlow,
+    shadowColor: '#E2B23A',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 12,
+    elevation: 12,
   },
   modalOverlay: {
     flex: 1,

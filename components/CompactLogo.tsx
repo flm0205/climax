@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, useWindowDimensions, Image } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
+import LogoSvg from './LogoSvg';
 
 interface CompactLogoProps {
   size?: 'small' | 'medium' | 'large';
@@ -19,11 +20,7 @@ export default function CompactLogo({ size = 'small' }: CompactLogoProps) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/images/Logo_Transparent.png')}
-        style={{ width: logoWidth, height: logoHeight }}
-        resizeMode="contain"
-      />
+      <LogoSvg width={logoWidth} height={logoHeight} />
     </View>
   );
 }
