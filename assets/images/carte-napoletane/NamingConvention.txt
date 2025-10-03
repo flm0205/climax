@@ -1,0 +1,3 @@
+Naming Convention:
+
+[# of card within its suit]_[Literal naming of card based on its number in italian]_di_[Literal naming of the suit in italiian].jpg
