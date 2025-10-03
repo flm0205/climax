@@ -333,7 +333,7 @@ export default function OfflineGameScreen() {
       <SafeAreaView style={styles.safeArea}>
         {gameState.currentRound && <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />}
 
-        <ScrollView contentContainerStyle={styles.gameContent}>
+        <View style={styles.gameContent}>
           <View style={styles.roundInfo}>
             <Text style={styles.roundText}>
               Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
@@ -341,40 +341,98 @@ export default function OfflineGameScreen() {
             {isOneCard && <Text style={styles.specialRoundText}>Special: You can't see your card!</Text>}
           </View>
 
-          <View style={styles.playersContainer}>
-            {gameState.players.map((player, index) => (
-              <PlayerSlot
-                key={player.id}
-                player={player}
-                isCurrentTurn={index === gameState.currentPlayerIndex}
-                showBet={true}
-                showTricks={gameState.phase === 'playing'}
-                position="top"
-                showCard={isOneCard && gameState.phase === 'betting'}
-                isCurrentPlayer={player.id === playerId}
-              />
-            ))}
-          </View>
-
-          {gameState.phase === 'playing' && gameState.currentRound && gameState.currentRound.currentTrick.cards.length > 0 && (
-            <View style={styles.trickArea}>
-              <Text style={styles.trickLabel}>Current Trick</Text>
-              <View style={styles.trickCards}>
-                {gameState.currentRound.currentTrick.cards.map((cardPlay) => (
-                  <View key={cardPlay.playerId} style={styles.trickCard}>
-                    <Card card={cardPlay.card} size="small" />
-                    <Text style={styles.trickPlayerName}>
-                      {gameState.players.find((p) => p.id === cardPlay.playerId)?.name}
-                    </Text>
-                  </View>
+          <View style={styles.tableLayout}>
+            <View style={styles.opponentTop}>
+              {gameState.players
+                .filter((p) => p.id !== playerId)
+                .slice(0, 2)
+                .map((player, index) => (
+                  <PlayerSlot
+                    key={player.id}
+                    player={player}
+                    isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
+                    showBet={true}
+                    showTricks={gameState.phase === 'playing'}
+                    position="top"
+                    showCard={isOneCard && gameState.phase === 'betting'}
+                    isCurrentPlayer={false}
+                  />
                 ))}
+            </View>
+
+            <View style={styles.tableSides}>
+              <View style={styles.opponentLeft}>
+                {gameState.players
+                  .filter((p) => p.id !== playerId)
+                  .slice(2, 3)
+                  .map((player) => (
+                    <PlayerSlot
+                      key={player.id}
+                      player={player}
+                      isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
+                      showBet={true}
+                      showTricks={gameState.phase === 'playing'}
+                      position="left"
+                      showCard={isOneCard && gameState.phase === 'betting'}
+                      isCurrentPlayer={false}
+                    />
+                  ))}
+              </View>
+
+              <View style={styles.centerPlayArea}>
+                {gameState.phase === 'playing' && gameState.currentRound && gameState.currentRound.currentTrick.cards.length > 0 && (
+                  <View style={styles.trickArea}>
+                    <View style={styles.trickCards}>
+                      {gameState.currentRound.currentTrick.cards.map((cardPlay) => (
+                        <View key={cardPlay.playerId} style={styles.trickCard}>
+                          <Card card={cardPlay.card} size="small" />
+                          <Text style={styles.trickPlayerName}>
+                            {gameState.players.find((p) => p.id === cardPlay.playerId)?.name}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              <View style={styles.opponentRight}>
+                {gameState.players
+                  .filter((p) => p.id !== playerId)
+                  .slice(3, 4)
+                  .map((player) => (
+                    <PlayerSlot
+                      key={player.id}
+                      player={player}
+                      isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
+                      showBet={true}
+                      showTricks={gameState.phase === 'playing'}
+                      position="right"
+                      showCard={isOneCard && gameState.phase === 'betting'}
+                      isCurrentPlayer={false}
+                    />
+                  ))}
               </View>
             </View>
-          )}
+
+            <View style={styles.playerBottom}>
+              {currentPlayer && (
+                <PlayerSlot
+                  key={currentPlayer.id}
+                  player={currentPlayer}
+                  isCurrentTurn={gameState.players.findIndex((p) => p.id === playerId) === gameState.currentPlayerIndex}
+                  showBet={true}
+                  showTricks={gameState.phase === 'playing'}
+                  position="bottom"
+                  showCard={isOneCard && gameState.phase === 'betting'}
+                  isCurrentPlayer={true}
+                />
+              )}
+            </View>
+          </View>
 
           {currentPlayer && (
             <View style={styles.handContainer}>
-              <Text style={styles.handLabel}>Your Hand</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hand}>
                 {currentPlayer.hand.map((card) => {
                   const shouldHide = isOneCard && gameState.phase === 'betting';
@@ -395,6 +453,7 @@ export default function OfflineGameScreen() {
               </ScrollView>
             </View>
           )}
+        </View>
         </ScrollView>
 
         <Modal
@@ -485,46 +544,71 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
   gameContent: {
-    flexGrow: 1,
-    padding: SPACING.md,
-    paddingBottom: SPACING.xxl,
+    flex: 1,
+    padding: SPACING.sm,
   },
   roundInfo: {
     alignItems: 'center',
+    paddingVertical: SPACING.sm,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 12,
     marginBottom: SPACING.md,
   },
   roundText: {
-    fontSize: FONT_SIZES.lg,
+    fontSize: FONT_SIZES.md,
     fontWeight: '700',
-    color: COLORS.text,
+    color: COLORS.gold,
+    letterSpacing: 1,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xs,
     color: COLORS.warning,
     fontStyle: 'italic',
     marginTop: SPACING.xs,
   },
-  playersContainer: {
+  tableLayout: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  opponentTop: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'center',
     gap: SPACING.sm,
-    marginBottom: SPACING.lg,
-    paddingHorizontal: SPACING.sm,
-    paddingTop: SPACING.sm,
+    paddingVertical: SPACING.sm,
   },
-  trickArea: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 16,
-    padding: SPACING.lg,
-    marginBottom: SPACING.lg,
+  tableSides: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  trickLabel: {
-    fontSize: FONT_SIZES.md,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: SPACING.md,
+  opponentLeft: {
+    paddingLeft: SPACING.sm,
+  },
+  opponentRight: {
+    paddingRight: SPACING.sm,
+  },
+  centerPlayArea: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.md,
+  },
+  trickArea: {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 20,
+    padding: SPACING.lg,
+    borderWidth: 3,
+    borderColor: COLORS.gold,
+    minWidth: 200,
+    minHeight: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...SHADOWS.goldGlow,
+  },
+  playerBottom: {
+    paddingVertical: SPACING.sm,
+    alignItems: 'center',
   },
   trickCards: {
     flexDirection: 'row',
@@ -541,21 +625,13 @@ const styles = StyleSheet.create({
     marginTop: SPACING.xs,
   },
   handContainer: {
-    marginTop: 'auto',
-    marginBottom: SPACING.md,
-  },
-  handLabel: {
-    fontSize: FONT_SIZES.md,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: SPACING.sm,
-    textAlign: 'center',
+    paddingVertical: SPACING.md,
   },
   hand: {
     flexDirection: 'row',
     gap: SPACING.sm,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.lg,
+    justifyContent: 'center',
   },
   modalOverlay: {
     flex: 1,
