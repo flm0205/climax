@@ -144,7 +144,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.gold,
     minWidth: 180,
+    maxWidth: 240,
     minHeight: 72,
+    flex: 0,
     ...SHADOWS.medium,
   },
   compactContainer: {
@@ -152,13 +154,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.sm,
     borderRadius: 14,
     minWidth: 160,
+    maxWidth: 220,
     minHeight: 64,
   },
   mobileContainer: {
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.sm,
-    minWidth: 165,
-    minHeight: 64,
+    paddingVertical: SPACING.xs + 2,
+    paddingHorizontal: SPACING.xs + 2,
+    minWidth: 140,
+    maxWidth: 180,
+    minHeight: 60,
+    borderRadius: 12,
   },
   currentTurn: {
     borderColor: COLORS.goldLight,
@@ -188,9 +193,10 @@ const styles = StyleSheet.create({
     marginRight: SPACING.sm,
   },
   avatarMobile: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: SPACING.xs + 2,
   },
   avatarText: {
     color: COLORS.text,
@@ -221,7 +227,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   nameMobile: {
-    fontSize: 14,
+    fontSize: 13,
+    marginBottom: 1,
   },
   score: {
     color: COLORS.textSecondary,
@@ -232,7 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   scoreMobile: {
-    fontSize: 13,
+    fontSize: 12,
   },
   bet: {
     color: COLORS.gold,
@@ -244,7 +251,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   betMobile: {
-    fontSize: 14,
+    fontSize: 13,
+    marginTop: 1,
   },
   tricks: {
     color: COLORS.success,
@@ -256,7 +264,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   tricksMobile: {
-    fontSize: 14,
+    fontSize: 13,
+    marginTop: 1,
   },
   disconnected: {
     color: COLORS.warning,

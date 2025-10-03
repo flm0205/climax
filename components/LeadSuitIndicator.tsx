@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerSmall: {
-    transform: [{ scale: 0.8 }],
+    transform: [{ scale: 0.75 }],
   },
   containerVerySmall: {
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.65 }],
   },
   gradient: {
     alignItems: 'center',
