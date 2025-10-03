@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWind
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../../constants/theme';
 import CompactLogo from '../../components/CompactLogo';
+import LogoSvg from '../../components/LogoSvg';
 import { GameState, Player, Card as CardType } from '../../types/game';
 import { getGameState, updateGameState, subscribeGameState, saveGameHistory } from '../../services/gameService';
 import { updateLobbyStatus } from '../../services/lobbyService';
@@ -401,7 +402,7 @@ export default function GameScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoWatermark}>
-        <CompactLogo size="large" />
+        <LogoSvg width={300} height={150} opacity={0.1} />
       </View>
       <ScrollView contentContainerStyle={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
         {gameState.currentRound && (
@@ -553,10 +554,9 @@ const styles = StyleSheet.create({
   },
   logoWatermark: {
     position: 'absolute',
-    top: '50%',
+    top: '40%',
     left: '50%',
-    transform: [{ translateX: -100 }, { translateY: -50 }],
-    opacity: 0.12,
+    transform: [{ translateX: -150 }, { translateY: -75 }],
     zIndex: 0,
     pointerEvents: 'none',
   },

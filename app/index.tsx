@@ -8,6 +8,7 @@ import { useNetworkStatus } from '../services/networkService';
 import { hasActiveOfflineGame } from '../services/offlineGameService';
 import Button from '../components/Button';
 import CompactLogo from '../components/CompactLogo';
+import LogoSvg from '../components/LogoSvg';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <CompactLogo size="large" />
+              <LogoSvg width={280} height={140} />
             </View>
 
             <View style={styles.statusBadge}>
@@ -181,6 +182,8 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginBottom: SPACING.xxl,
     alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: SPACING.md,
   },
   statusBadge: {
     flexDirection: 'row',
