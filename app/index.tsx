@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
@@ -27,15 +27,12 @@ export default function HomeScreen() {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.header}>
-            <View style={styles.titleContainer}>
-              <LinearGradient
-                colors={[COLORS.gold, COLORS.goldLight, COLORS.gold] as any}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.titleGradient}
-              >
-                <Text style={styles.title}>CLIMAX</Text>
-              </LinearGradient>
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../assets/images/ChatGPT Image Oct 3, 2025, 08_50_05 PM.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
             </View>
             <Text style={styles.subtitle}>Italian Card Game</Text>
 
@@ -144,39 +141,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: SPACING.xxl,
   },
-  titleContainer: {
+  logoContainer: {
     marginBottom: SPACING.md,
+    ...SHADOWS.medium,
   },
-  titleGradient: {
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm,
-    borderRadius: 16,
-  },
-  title: {
-    fontSize: FONT_SIZES.xxxl + 24,
-    fontWeight: '900',
-    color: COLORS.primaryDark,
-    letterSpacing: 6,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
+  logo: {
+    width: 280,
+    height: 200,
   },
   subtitle: {
     fontSize: FONT_SIZES.lg,
-    color: COLORS.textSecondary,
+    color: COLORS.gold,
     fontStyle: 'italic',
     letterSpacing: 2,
     marginBottom: SPACING.md,
+    fontWeight: '600',
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'rgba(15, 61, 46, 0.6)',
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: COLORS.highlight,
   },
   statusIndicator: {
     width: 8,
@@ -250,16 +239,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderColor: COLORS.gold,
+    backgroundColor: 'rgba(15, 61, 46, 0.4)',
     ...SHADOWS.medium,
   },
   infoBoxGradient: {
     padding: SPACING.lg,
+    backgroundColor: 'transparent',
   },
   infoTitle: {
     fontSize: FONT_SIZES.lg,
     fontWeight: '800',
-    color: COLORS.text,
+    color: COLORS.gold,
     marginBottom: SPACING.md,
     letterSpacing: 1,
   },

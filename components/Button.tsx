@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: COLORS.accent,
+    borderColor: COLORS.gold,
   },
   disabled: {
     opacity: 0.5,
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
   outlineText: {
-    color: COLORS.accent,
+    color: COLORS.gold,
   },
 });
