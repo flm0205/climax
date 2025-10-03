@@ -336,21 +336,17 @@ export default function OfflineGameScreen() {
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
-          <View style={styles.topBar}>
-            <View style={styles.logoWrapper}>
-              <CompactLogo size="small" />
+          {gameState.currentRound && (
+            <View style={styles.leadSuitContainer}>
+              <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
             </View>
-            {gameState.currentRound && (
-              <View style={styles.leadSuitWrapper}>
-                <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
-              </View>
-            )}
-            <View style={[styles.roundInfo, isSmallScreen && styles.roundInfoMobile]}>
-              <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
-                Round {gameState.currentSequenceIndex + 1}/{gameState.roundSequence.length}
-              </Text>
-              {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special!</Text>}
-            </View>
+          )}
+
+          <View style={styles.roundInfoContainer}>
+            <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
+              Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
+            </Text>
+            {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
           </View>
 
           <View style={styles.tableLayout}>
@@ -573,61 +569,46 @@ const styles = StyleSheet.create({
   },
   gameContent: {
     flex: 1,
-    padding: SPACING.xs,
+    padding: SPACING.sm,
   },
   gameContentCompact: {
     padding: SPACING.xs,
   },
-  topBar: {
-    flexDirection: 'row',
+  leadSuitContainer: {
+    position: 'absolute',
+    top: SPACING.sm,
+    left: SPACING.sm,
+    zIndex: 10,
+  },
+  roundInfoContainer: {
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.xs,
-    paddingVertical: SPACING.xs,
-    gap: SPACING.xs,
-    flexWrap: 'wrap',
-  },
-  logoWrapper: {
-    flex: 0,
-  },
-  leadSuitWrapper: {
-    flex: 0,
-    marginHorizontal: SPACING.xs,
-  },
-  roundInfo: {
-    flex: 1,
-    alignItems: 'flex-end',
-    paddingVertical: SPACING.xs,
-    paddingHorizontal: SPACING.sm,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 8,
-    minWidth: 100,
-  },
-  roundInfoMobile: {
-    paddingVertical: 4,
-    paddingHorizontal: SPACING.xs,
-    minWidth: 80,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    marginBottom: SPACING.md,
   },
   roundText: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.xxxl,
     fontWeight: '700',
     color: COLORS.gold,
-    letterSpacing: 0.5,
-    textAlign: 'right',
+    letterSpacing: 1,
+    textAlign: 'center',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xxl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.xs,
-    color: COLORS.goldLight,
+    fontSize: FONT_SIZES.lg,
+    color: COLORS.gold,
     fontStyle: 'italic',
-    marginTop: 2,
+    marginTop: SPACING.xs,
     fontWeight: '600',
-    textAlign: 'right',
+    textAlign: 'center',
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.xs - 1,
+    fontSize: FONT_SIZES.md,
   },
   tableLayout: {
     flex: 1,

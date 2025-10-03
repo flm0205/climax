@@ -1,7 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
-import { COLORS, FONT_SIZES } from '../constants/theme';
-import Svg, { Text as SvgText } from 'react-native-svg';
+import { View, StyleSheet, useWindowDimensions, Image } from 'react-native';
 
 interface CompactLogoProps {
   size?: 'small' | 'medium' | 'large';
@@ -12,27 +10,20 @@ export default function CompactLogo({ size = 'small' }: CompactLogoProps) {
   const isVerySmall = width < 360;
 
   const logoSizes = {
-    small: { width: isVerySmall ? 80 : 100, height: isVerySmall ? 32 : 40, fontSize: 32 },
-    medium: { width: 140, height: 56, fontSize: 44 },
-    large: { width: 200, height: 80, fontSize: 56 },
+    small: { width: isVerySmall ? 60 : 80, height: isVerySmall ? 30 : 40 },
+    medium: { width: 140, height: 70 },
+    large: { width: 200, height: 100 },
   };
 
-  const { width: logoWidth, height: logoHeight, fontSize } = logoSizes[size];
+  const { width: logoWidth, height: logoHeight } = logoSizes[size];
 
   return (
-    <View style={[styles.container, size === 'large' && styles.containerLarge]}>
-      <Svg width={logoWidth} height={logoHeight} viewBox="0 0 200 80">
-        <SvgText
-          x="100"
-          y="50"
-          fontSize={fontSize}
-          fontWeight="bold"
-          fill="#E2B23A"
-          textAnchor="middle"
-        >
-          CLIMAX
-        </SvgText>
-      </Svg>
+    <View style={styles.container}>
+      <Image
+        source={require('../assets/images/logo.svg')}
+        style={{ width: logoWidth, height: logoHeight }}
+        resizeMode="contain"
+      />
     </View>
   );
 }
@@ -41,17 +32,5 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    backgroundColor: 'rgba(226, 178, 58, 0.1)',
-    borderRadius: 6,
-    borderWidth: 1.5,
-    borderColor: COLORS.gold,
-  },
-  containerLarge: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 12,
-    borderWidth: 2.5,
   },
 });

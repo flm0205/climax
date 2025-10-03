@@ -19,7 +19,7 @@ export default function LeadSuitIndicator({ leadSuitCard }: LeadSuitIndicatorPro
         colors={['rgba(4, 43, 18, 0.95)', 'rgba(10, 59, 26, 0.95)']}
         style={styles.gradient}
       >
-        <Text style={styles.label}>Lead</Text>
+        <Text style={styles.label}>LEAD SUIT</Text>
         <Card card={leadSuitCard} faceUp={true} size="small" />
       </LinearGradient>
     </View>
@@ -28,26 +28,27 @@ export default function LeadSuitIndicator({ leadSuitCard }: LeadSuitIndicatorPro
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   containerSmall: {
-    transform: [{ scale: 0.9 }],
+    transform: [{ scale: 0.85 }],
   },
   gradient: {
     alignItems: 'center',
-    paddingVertical: SPACING.xs,
-    paddingHorizontal: SPACING.sm,
-    borderRadius: 10,
-    borderWidth: 2,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    borderRadius: 12,
+    borderWidth: 3,
     borderColor: COLORS.gold,
     ...SHADOWS.goldGlow,
+    minWidth: 80,
   },
   label: {
     color: COLORS.gold,
     fontSize: FONT_SIZES.xs,
     fontWeight: '700',
-    marginBottom: SPACING.xs,
-    letterSpacing: 0.5,
+    marginBottom: SPACING.sm,
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
 });
