@@ -1,9 +1,10 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import React, { useRef, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Image } from 'react-native';
 import { Card as CardType } from '../types/game';
 import { COLORS, CARD_DIMENSIONS, SPACING, SHADOWS, ANIMATIONS } from '../constants/theme';
 import { SUIT_NAMES } from '../constants/cards';
 import { LinearGradient } from 'expo-linear-gradient';
+import { getCardImage } from '../utils/cardImages';
 
 interface CardProps {
   card: CardType;
@@ -23,6 +24,7 @@ export default function Card({ card, faceUp = true, onPress, disabled = false, s
   const dimensions = SIZES[size];
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     Animated.spring(rotateAnim, {
@@ -62,29 +64,23 @@ export default function Card({ card, faceUp = true, onPress, disabled = false, s
     outputRange: ['180deg', '0deg'],
   });
 
-  const CardContent = (
-    <Animated.View
-      style={[
-        {
-          width: dimensions.width,
-          height: dimensions.height,
-          transform: [{ scale: scaleAnim }, { rotateY: rotation }],
-        },
-      ]}
-    >
-      <LinearGradient
-        colors={faceUp ? (COLORS.cardFrontGradient as any) : (COLORS.cardBackGradient as any)}
-        style={[
-          styles.card,
-          {
-            width: dimensions.width,
-            height: dimensions.height,
-          },
-          disabled && styles.disabled,
-        ]}
-      >
-        <View style={styles.cardBorder} />
-        {faceUp ? (
+  const cardImageSource = getCardImage(card);
+
+  const renderCardFace = () => {
+    if (!cardImageSource || imageError) {
+      return (
+        <LinearGradient
+          colors={COLORS.cardFrontGradient as any}
+          style={[
+            styles.card,
+            {
+              width: dimensions.width,
+              height: dimensions.height,
+            },
+            disabled && styles.disabled,
+          ]}
+        >
+          <View style={styles.cardBorder} />
           <View style={styles.cardFace}>
             <View style={styles.cornerTop}>
               <Text
@@ -122,13 +118,68 @@ export default function Card({ card, faceUp = true, onPress, disabled = false, s
               <Text style={styles.suitName}>{SUIT_NAMES[card.suit]}</Text>
             </View>
           </View>
-        ) : (
+        </LinearGradient>
+      );
+    }
+
+    return (
+      <View
+        style={[
+          styles.card,
+          {
+            width: dimensions.width,
+            height: dimensions.height,
+          },
+          disabled && styles.disabled,
+        ]}
+      >
+        <Image
+          source={cardImageSource}
+          style={[
+            styles.cardImage,
+            {
+              width: dimensions.width,
+              height: dimensions.height,
+            },
+          ]}
+          resizeMode="cover"
+          onError={() => setImageError(true)}
+        />
+      </View>
+    );
+  };
+
+  const CardContent = (
+    <Animated.View
+      style={[
+        {
+          width: dimensions.width,
+          height: dimensions.height,
+          transform: [{ scale: scaleAnim }, { rotateY: rotation }],
+        },
+      ]}
+    >
+      {faceUp ? (
+        renderCardFace()
+      ) : (
+        <LinearGradient
+          colors={COLORS.cardBackGradient as any}
+          style={[
+            styles.card,
+            {
+              width: dimensions.width,
+              height: dimensions.height,
+            },
+            disabled && styles.disabled,
+          ]}
+        >
+          <View style={styles.cardBorder} />
           <View style={styles.cardBackContent}>
             <Text style={styles.backText}>CLIMAX</Text>
             <View style={styles.backPattern} />
           </View>
-        )}
-      </LinearGradient>
+        </LinearGradient>
+      )}
     </Animated.View>
   );
 
@@ -165,6 +216,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
     ...SHADOWS.card,
+  },
+  cardImage: {
+    borderRadius: CARD_DIMENSIONS.borderRadius + 2,
   },
   cardBorder: {
     position: 'absolute',
