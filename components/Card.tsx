@@ -176,7 +176,6 @@ export default function Card({ card, faceUp = true, onPress, disabled = false, s
           <View style={styles.cardBorder} />
           <View style={styles.cardBackContent}>
             <Text style={styles.backText}>CLIMAX</Text>
-            <Text style={styles.backSubtext}>Carte Napoletane</Text>
             <View style={styles.backPattern} />
           </View>
         </LinearGradient>
@@ -294,19 +293,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '800',
     color: COLORS.gold,
-    letterSpacing: 3,
+    transform: [{ rotate: '-45deg' }],
+    letterSpacing: 2,
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 3,
-  },
-  backSubtext: {
-    fontSize: 8,
-    fontWeight: '600',
-    color: COLORS.textSecondary,
-    letterSpacing: 1,
-    fontStyle: 'italic',
-    marginTop: 4,
-    opacity: 0.8,
   },
   backPattern: {
     position: 'absolute',

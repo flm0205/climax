@@ -37,7 +37,7 @@ export default function HomeScreen() {
                 <Text style={styles.title}>CLIMAX</Text>
               </LinearGradient>
             </View>
-            <Text style={styles.subtitle}>The Classic Italian Card Game</Text>
+            <Text style={styles.subtitle}>Italian Card Game</Text>
 
             <View style={styles.statusBadge}>
               <View style={[styles.statusIndicator, isOnline ? styles.statusOnline : styles.statusOffline]} />
@@ -48,9 +48,9 @@ export default function HomeScreen() {
           <View style={styles.menu}>
             {hasOfflineGame && (
               <View style={styles.resumeContainer}>
-                <Text style={styles.resumeTitle}>Game in Progress</Text>
+                <Text style={styles.resumeTitle}>Continue Playing</Text>
                 <Button
-                  title="Resume Game"
+                  title="Resume Offline Game"
                   onPress={() => router.push('/offline-game')}
                   variant="primary"
                   style={styles.resumeButton}
@@ -63,14 +63,14 @@ export default function HomeScreen() {
             </View>
 
             <Button
-              title="Host a Table"
+              title="Create Online Lobby"
               onPress={() => router.push('/create-lobby')}
               style={styles.menuButton}
               disabled={!isOnline}
             />
 
             <Button
-              title="Join a Table"
+              title="Join Online Lobby"
               onPress={() => router.push('/join-lobby')}
               variant="secondary"
               style={styles.menuButton}
@@ -80,11 +80,11 @@ export default function HomeScreen() {
             <View style={styles.divider} />
 
             <View style={styles.sectionTitle}>
-              <Text style={styles.sectionTitleText}>Solo Play</Text>
+              <Text style={styles.sectionTitleText}>Play Offline</Text>
             </View>
 
             <Button
-              title="Challenge the House"
+              title="Play vs AI"
               onPress={() => router.push('/offline-setup')}
               variant="primary"
               style={styles.menuButton}
@@ -102,22 +102,22 @@ export default function HomeScreen() {
                 colors={['rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0.03)'] as any}
                 style={styles.infoBoxGradient}
               >
-                <Text style={styles.infoTitle}>Le Regole</Text>
+                <Text style={styles.infoTitle}>How to Play</Text>
                 <View style={styles.infoItem}>
                   <Text style={styles.infoBullet}>●</Text>
-                  <Text style={styles.infoText}>2-6 players play with Neapolitan cards</Text>
+                  <Text style={styles.infoText}>2-6 players with Neapolitan cards</Text>
                 </View>
                 <View style={styles.infoItem}>
                   <Text style={styles.infoBullet}>●</Text>
-                  <Text style={styles.infoText}>Wager on the tricks you believe you'll win</Text>
+                  <Text style={styles.infoText}>Bet on tricks you'll win each round</Text>
                 </View>
                 <View style={styles.infoItem}>
                   <Text style={styles.infoBullet}>●</Text>
-                  <Text style={styles.infoText}>Match your wager precisely to earn points</Text>
+                  <Text style={styles.infoText}>Match your bet exactly to score points</Text>
                 </View>
                 <View style={styles.infoItem}>
                   <Text style={styles.infoBullet}>●</Text>
-                  <Text style={styles.infoText}>The Lead Suit trumps all others</Text>
+                  <Text style={styles.infoText}>Watch the Lead Suit - it beats all others!</Text>
                 </View>
               </LinearGradient>
             </View>
