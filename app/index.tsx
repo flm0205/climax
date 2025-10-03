@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
@@ -30,11 +30,7 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <Image
-                source={require('../assets/images/Logo_Transparent.png')}
-                style={styles.logo}
-                resizeMode="contain"
-              />
+              <Text style={styles.logo}>CLIMAX</Text>
             </View>
             <Text style={styles.tagline}>The Original Italian Trick-Taking Card Game</Text>
 
@@ -185,10 +181,21 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginBottom: SPACING.lg,
     alignItems: 'center',
+    paddingVertical: SPACING.xl,
+    paddingHorizontal: SPACING.xxxl,
+    backgroundColor: 'rgba(226, 178, 58, 0.15)',
+    borderRadius: 16,
+    borderWidth: 3,
+    borderColor: COLORS.gold,
   },
   logo: {
-    width: 280,
-    height: 140,
+    fontSize: FONT_SIZES.xxxl + 20,
+    color: COLORS.gold,
+    fontWeight: '800',
+    letterSpacing: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
   },
   tagline: {
     fontSize: FONT_SIZES.md,

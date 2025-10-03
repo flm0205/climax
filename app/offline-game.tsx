@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
+import CompactLogo from '../components/CompactLogo';
 import { GameState, Player, Card as CardType } from '../types/game';
 import { loadOfflineGame, updateOfflineGame, endOfflineGame } from '../services/offlineGameService';
 import Card from '../components/Card';
@@ -281,6 +282,9 @@ export default function OfflineGameScreen() {
     playCard(card);
   };
 
+  const { width, height } = useWindowDimensions();
+  const isSmallScreen = width < 400;
+  const isShortScreen = height < 700;
   const currentPlayer = gameState?.players.find((p) => p.id === playerId);
   const isOneCard = gameState?.currentRound ? isOneCardRound(gameState.currentRound.cardsPerPlayer) : false;
 
@@ -333,12 +337,16 @@ export default function OfflineGameScreen() {
       <SafeAreaView style={styles.safeArea}>
         {gameState.currentRound && <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />}
 
-        <View style={styles.gameContent}>
-          <View style={styles.roundInfo}>
-            <Text style={styles.roundText}>
+        <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
+          <View style={styles.header}>
+            <CompactLogo size="small" />
+          </View>
+
+          <View style={[styles.roundInfo, isSmallScreen && styles.roundInfoMobile]}>
+            <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
               Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
             </Text>
-            {isOneCard && <Text style={styles.specialRoundText}>Special: You can't see your card!</Text>}
+            {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
           </View>
 
           <View style={styles.tableLayout}>
@@ -432,22 +440,39 @@ export default function OfflineGameScreen() {
           </View>
 
           {currentPlayer && (
-            <View style={styles.handContainer}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hand}>
+            <View style={[styles.handContainer, currentPlayer.hand.length === 1 && styles.handContainerSingle]}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={[
+                  styles.hand,
+                  currentPlayer.hand.length === 1 && styles.handSingle
+                ]}
+                snapToInterval={isSmallScreen ? 90 : 100}
+                decelerationRate="fast"
+              >
                 {currentPlayer.hand.map((card) => {
                   const shouldHide = isOneCard && gameState.phase === 'betting';
+                  const isSingleCard = currentPlayer.hand.length === 1;
                   return (
-                    <Card
+                    <View
                       key={card.id}
-                      card={card}
-                      faceUp={!shouldHide}
-                      onPress={() => handleCardPress(card)}
-                      disabled={
-                        gameState.phase !== 'playing' ||
-                        gameState.currentPlayerIndex !== gameState.players.findIndex((p) => p.id === playerId)
-                      }
-                      size="medium"
-                    />
+                      style={[
+                        styles.cardWrapper,
+                        isSingleCard && styles.cardWrapperSingle
+                      ]}
+                    >
+                      <Card
+                        card={card}
+                        faceUp={!shouldHide}
+                        onPress={() => handleCardPress(card)}
+                        disabled={
+                          gameState.phase !== 'playing' ||
+                          gameState.currentPlayerIndex !== gameState.players.findIndex((p) => p.id === playerId)
+                        }
+                        size={isSingleCard ? 'large' : 'medium'}
+                      />
+                    </View>
                   );
                 })}
               </ScrollView>
@@ -545,29 +570,58 @@ const styles = StyleSheet.create({
   gameContent: {
     flex: 1,
     padding: SPACING.sm,
+    paddingTop: SPACING.xxxl + SPACING.md,
+  },
+  gameContentCompact: {
+    padding: SPACING.xs,
+    paddingTop: SPACING.xxxl,
+  },
+  header: {
+    position: 'absolute',
+    top: SPACING.sm,
+    left: SPACING.sm,
+    zIndex: 5,
   },
   roundInfo: {
     alignItems: 'center',
     paddingVertical: SPACING.sm,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    paddingHorizontal: SPACING.md,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     borderRadius: 12,
     marginBottom: SPACING.md,
+    marginTop: SPACING.xxxl,
+  },
+  roundInfoMobile: {
+    paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.sm,
+    marginBottom: SPACING.sm,
   },
   roundText: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.lg,
     fontWeight: '700',
     color: COLORS.gold,
-    letterSpacing: 1,
+    letterSpacing: 1.2,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  roundTextMobile: {
+    fontSize: FONT_SIZES.xl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.xs,
-    color: COLORS.warning,
+    fontSize: FONT_SIZES.sm,
+    color: COLORS.goldLight,
     fontStyle: 'italic',
     marginTop: SPACING.xs,
+    fontWeight: '600',
+  },
+  specialRoundTextMobile: {
+    fontSize: FONT_SIZES.md,
   },
   tableLayout: {
     flex: 1,
     justifyContent: 'space-between',
+    paddingVertical: SPACING.xs,
   },
   opponentTop: {
     flexDirection: 'row',
@@ -575,7 +629,7 @@ const styles = StyleSheet.create({
     gap: SPACING.xs,
     paddingVertical: SPACING.xs,
     paddingHorizontal: SPACING.xs,
-    maxWidth: '70%',
+    maxWidth: '80%',
     alignSelf: 'center',
   },
   tableSides: {
@@ -628,12 +682,28 @@ const styles = StyleSheet.create({
   },
   handContainer: {
     paddingVertical: SPACING.md,
+    minHeight: 140,
+  },
+  handContainerSingle: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   hand: {
     flexDirection: 'row',
     gap: SPACING.sm,
     paddingHorizontal: SPACING.lg,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  handSingle: {
+    justifyContent: 'center',
+  },
+  cardWrapper: {
+    minWidth: 44,
+    minHeight: 44,
+  },
+  cardWrapperSingle: {
+    ...SHADOWS.goldGlow,
   },
   modalOverlay: {
     flex: 1,

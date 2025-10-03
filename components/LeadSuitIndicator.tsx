@@ -29,14 +29,15 @@ export default function LeadSuitIndicator({ leadSuitCard }: LeadSuitIndicatorPro
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 60,
-    right: SPACING.sm,
+    top: 10,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
     zIndex: 10,
   },
   containerSmall: {
-    top: 60,
-    right: SPACING.xs,
-    transform: [{ scale: 0.75 }],
+    top: 8,
+    transform: [{ scale: 0.85 }],
   },
   gradient: {
     alignItems: 'center',

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { COLORS, SPACING, FONT_SIZES } from '../../constants/theme';
+import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../../constants/theme';
+import CompactLogo from '../../components/CompactLogo';
 import { GameState, Player, Card as CardType } from '../../types/game';
 import { getGameState, updateGameState, subscribeGameState, saveGameHistory } from '../../services/gameService';
 import { updateLobbyStatus } from '../../services/lobbyService';
@@ -334,6 +335,9 @@ export default function GameScreen() {
     playCard(card);
   };
 
+  const { width, height } = useWindowDimensions();
+  const isSmallScreen = width < 400;
+  const isShortScreen = height < 700;
   const currentPlayer = gameState?.players.find((p) => p.id === playerId);
   const isOneCard = gameState?.currentRound ? isOneCardRound(gameState.currentRound.cardsPerPlayer) : false;
 
@@ -396,17 +400,21 @@ export default function GameScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <CompactLogo size="small" />
+      </View>
+
       {gameState.currentRound && <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />}
 
-      <ScrollView contentContainerStyle={styles.gameContent}>
-        <View style={styles.roundInfo}>
-          <Text style={styles.roundText}>
+      <ScrollView contentContainerStyle={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
+        <View style={[styles.roundInfo, isSmallScreen && styles.roundInfoMobile]}>
+          <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
             Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
           </Text>
-          {isOneCard && <Text style={styles.specialRoundText}>Special: You can't see your card!</Text>}
+          {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
         </View>
 
-        <View style={styles.playersContainer}>
+        <View style={[styles.playersContainer, isSmallScreen && styles.playersContainerMobile]}>
           {gameState.players.map((player, index) => (
             <PlayerSlot
               key={player.id}
@@ -436,12 +444,38 @@ export default function GameScreen() {
         )}
 
         {currentPlayer && (
-          <View style={styles.handContainer}>
-            <Text style={styles.handLabel}>Your Hand</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hand}>
+          <View style={[styles.handContainer, currentPlayer.hand.length === 1 && styles.handContainerSingle]}>
+            {currentPlayer.hand.length > 1 && <Text style={styles.handLabel}>Your Hand</Text>}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.hand,
+                currentPlayer.hand.length === 1 && styles.handSingle
+              ]}
+              snapToInterval={isSmallScreen ? 90 : 100}
+              decelerationRate="fast"
+            >
               {currentPlayer.hand.map((card) => {
                 const shouldHide = isOneCard && gameState.phase === 'betting';
-                return <Card key={card.id} card={card} faceUp={!shouldHide} onPress={() => handleCardPress(card)} disabled={gameState.phase !== 'playing' || gameState.currentPlayerIndex !== gameState.players.findIndex((p) => p.id === playerId)} size="medium" />;
+                const isSingleCard = currentPlayer.hand.length === 1;
+                return (
+                  <View
+                    key={card.id}
+                    style={[
+                      styles.cardWrapper,
+                      isSingleCard && styles.cardWrapperSingle
+                    ]}
+                  >
+                    <Card
+                      card={card}
+                      faceUp={!shouldHide}
+                      onPress={() => handleCardPress(card)}
+                      disabled={gameState.phase !== 'playing' || gameState.currentPlayerIndex !== gameState.players.findIndex((p) => p.id === playerId)}
+                      size={isSingleCard ? 'large' : 'medium'}
+                    />
+                  </View>
+                );
               })}
             </ScrollView>
           </View>
@@ -523,25 +557,58 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.lg,
     color: COLORS.text,
   },
+  header: {
+    position: 'absolute',
+    top: SPACING.md,
+    left: SPACING.md,
+    zIndex: 5,
+  },
   gameContent: {
     flexGrow: 1,
     padding: SPACING.md,
+    paddingTop: SPACING.xxxl + SPACING.md,
     paddingBottom: SPACING.xxl,
+  },
+  gameContentCompact: {
+    padding: SPACING.sm,
+    paddingTop: SPACING.xxxl,
+    paddingBottom: SPACING.xl,
   },
   roundInfo: {
     alignItems: 'center',
     marginBottom: SPACING.md,
+    marginTop: SPACING.xxxl,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 12,
+  },
+  roundInfoMobile: {
+    paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.sm,
+    marginBottom: SPACING.sm,
   },
   roundText: {
     fontSize: FONT_SIZES.lg,
     fontWeight: '700',
-    color: COLORS.text,
+    color: COLORS.gold,
+    letterSpacing: 1.2,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  roundTextMobile: {
+    fontSize: FONT_SIZES.xl,
   },
   specialRoundText: {
     fontSize: FONT_SIZES.sm,
-    color: COLORS.warning,
+    color: COLORS.goldLight,
     fontStyle: 'italic',
     marginTop: SPACING.xs,
+    fontWeight: '600',
+  },
+  specialRoundTextMobile: {
+    fontSize: FONT_SIZES.md,
   },
   playersContainer: {
     flexDirection: 'row',
@@ -550,6 +617,10 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     marginBottom: SPACING.lg,
     paddingHorizontal: SPACING.xs,
+  },
+  playersContainerMobile: {
+    gap: SPACING.xs,
+    marginBottom: SPACING.md,
   },
   trickArea: {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -581,6 +652,11 @@ const styles = StyleSheet.create({
   handContainer: {
     marginTop: 'auto',
     marginBottom: SPACING.md,
+    minHeight: 140,
+  },
+  handContainerSingle: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   handLabel: {
     fontSize: FONT_SIZES.md,
@@ -594,6 +670,17 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
+    alignItems: 'center',
+  },
+  handSingle: {
+    justifyContent: 'center',
+  },
+  cardWrapper: {
+    minWidth: 44,
+    minHeight: 44,
+  },
+  cardWrapperSingle: {
+    ...SHADOWS.goldGlow,
   },
   modalOverlay: {
     flex: 1,

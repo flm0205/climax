@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Platform } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Platform, useWindowDimensions } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,6 +15,18 @@ interface BettingWheelProps {
 export default function BettingWheel({ maxBet, onBetConfirmed, invalidBets = [], onMinimize }: BettingWheelProps) {
   const [selectedBet, setSelectedBet] = useState(0);
   const scaleAnims = useRef<{ [key: number]: Animated.Value }>({}).current;
+  const slideAnim = useRef(new Animated.Value(300)).current;
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width < 400;
+
+  useEffect(() => {
+    Animated.spring(slideAnim, {
+      toValue: 0,
+      useNativeDriver: true,
+      tension: 65,
+      friction: 10,
+    }).start();
+  }, []);
 
   const bets = Array.from({ length: maxBet + 1 }, (_, i) => i);
 
@@ -61,7 +73,7 @@ export default function BettingWheel({ maxBet, onBetConfirmed, invalidBets = [],
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { transform: [{ translateY: slideAnim }] }]}>
       <LinearGradient colors={[COLORS.modal, COLORS.primaryDark] as any} style={styles.modalContent}>
         <View style={styles.header}>
           <Text style={styles.title}>Place Your Bet</Text>
@@ -133,7 +145,7 @@ export default function BettingWheel({ maxBet, onBetConfirmed, invalidBets = [],
           style={styles.confirmButton}
         />
       </LinearGradient>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -200,9 +212,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
   },
   betOption: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    minWidth: 72,
+    minHeight: 72,
     borderWidth: 2,
     borderColor: COLORS.highlight,
     justifyContent: 'center',

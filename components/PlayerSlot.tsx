@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Animated, useWindowDimensions } from 'react-native';
 import { Player } from '../types/game';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
 import Card from './Card';
@@ -23,14 +23,56 @@ export default function PlayerSlot({
   showCard = false,
   isCurrentPlayer = false,
 }: PlayerSlotProps) {
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width < 400;
   const isCompact = position === 'top';
 
+  const glowAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (isCurrentTurn) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(glowAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: false,
+          }),
+          Animated.timing(glowAnim, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: false,
+          }),
+        ])
+      ).start();
+    } else {
+      glowAnim.setValue(0);
+    }
+  }, [isCurrentTurn]);
+
+  const borderColor = glowAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [COLORS.gold, COLORS.goldLight],
+  });
+
+  const shadowRadius = glowAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [16, 24],
+  });
+
   return (
-    <View style={[
+    <Animated.View style={[
       styles.container,
       isCompact && styles.compactContainer,
+      isSmallScreen && styles.mobileContainer,
+      isSmallScreen && isCompact && styles.mobileCompactContainer,
       isCurrentTurn && styles.currentTurn,
-      isCurrentTurn && isCompact && styles.currentTurnCompact
+      isCurrentTurn && isCompact && styles.currentTurnCompact,
+      isCurrentTurn && {
+        borderColor,
+        shadowRadius,
+        shadowOpacity: 0.9,
+      },
     ]}>
       <View style={[styles.avatar, isCompact && styles.avatarCompact]}>
         <Text style={[styles.avatarText, isCompact && styles.avatarTextCompact]}>
@@ -51,7 +93,7 @@ export default function PlayerSlot({
           <Card card={player.hand[0]} size="small" faceUp={!isCurrentPlayer} />
         </View>
       )}
-    </View>
+    </Animated.View>
   );
 }
 
@@ -127,19 +169,27 @@ const styles = StyleSheet.create({
   },
   bet: {
     color: COLORS.gold,
-    fontSize: FONT_SIZES.sm,
-    fontWeight: '600',
+    fontSize: FONT_SIZES.md,
+    fontWeight: '700',
   },
   betCompact: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: FONT_SIZES.sm,
   },
   tricks: {
     color: COLORS.success,
-    fontSize: FONT_SIZES.sm,
-    fontWeight: '600',
+    fontSize: FONT_SIZES.md,
+    fontWeight: '700',
   },
   tricksCompact: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: FONT_SIZES.sm,
+  },
+  mobileContainer: {
+    padding: SPACING.sm,
+    minWidth: 140,
+  },
+  mobileCompactContainer: {
+    padding: SPACING.xs,
+    minWidth: 120,
   },
   disconnected: {
     color: COLORS.warning,

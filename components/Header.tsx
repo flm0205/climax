@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Menu } from 'lucide-react-native';
-import { COLORS, SPACING, SHADOWS } from '../constants/theme';
+import { COLORS, SPACING, SHADOWS, FONT_SIZES } from '../constants/theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface HeaderProps {
@@ -35,11 +35,7 @@ export default function Header({ showBack = true, showMenu = true, transparent =
     >
       <View style={styles.headerContent}>
         <TouchableOpacity onPress={handleLogoPress} style={styles.logoContainer} activeOpacity={0.8}>
-          <Image
-            source={require('../assets/images/Logo_Transparent.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          <Text style={styles.logo}>CLIMAX</Text>
         </TouchableOpacity>
 
         {showMenu && (
@@ -73,10 +69,22 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flex: 1,
+    paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.md,
+    backgroundColor: 'rgba(226, 178, 58, 0.15)',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: COLORS.gold,
+    alignSelf: 'flex-start',
   },
   logo: {
-    height: 48,
-    width: 160,
+    fontSize: FONT_SIZES.xl,
+    color: COLORS.gold,
+    fontWeight: '800',
+    letterSpacing: 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   menuButton: {
     marginLeft: SPACING.md,
