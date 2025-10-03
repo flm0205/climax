@@ -7,6 +7,7 @@ import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
 import { useNetworkStatus } from '../services/networkService';
 import { hasActiveOfflineGame } from '../services/offlineGameService';
 import Button from '../components/Button';
+import CompactLogo from '../components/CompactLogo';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <Text style={styles.logo}>CLIMAX</Text>
+              <CompactLogo size="large" />
             </View>
             <Text style={styles.tagline}>The Original Italian Trick-Taking Card Game</Text>
 
@@ -181,21 +182,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginBottom: SPACING.lg,
     alignItems: 'center',
-    paddingVertical: SPACING.xl,
-    paddingHorizontal: SPACING.xxxl,
-    backgroundColor: 'rgba(226, 178, 58, 0.15)',
-    borderRadius: 16,
-    borderWidth: 3,
-    borderColor: COLORS.gold,
-  },
-  logo: {
-    fontSize: FONT_SIZES.xxxl + 20,
-    color: COLORS.gold,
-    fontWeight: '800',
-    letterSpacing: 4,
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 0, height: 3 },
-    textShadowRadius: 6,
   },
   tagline: {
     fontSize: FONT_SIZES.md,

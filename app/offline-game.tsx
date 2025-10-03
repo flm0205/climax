@@ -335,18 +335,22 @@ export default function OfflineGameScreen() {
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        {gameState.currentRound && <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />}
-
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
-          <View style={styles.header}>
-            <CompactLogo size="small" />
-          </View>
-
-          <View style={[styles.roundInfo, isSmallScreen && styles.roundInfoMobile]}>
-            <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
-              Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
-            </Text>
-            {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
+          <View style={styles.topBar}>
+            <View style={styles.logoWrapper}>
+              <CompactLogo size="small" />
+            </View>
+            {gameState.currentRound && (
+              <View style={styles.leadSuitWrapper}>
+                <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
+              </View>
+            )}
+            <View style={[styles.roundInfo, isSmallScreen && styles.roundInfoMobile]}>
+              <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
+                Round {gameState.currentSequenceIndex + 1}/{gameState.roundSequence.length}
+              </Text>
+              {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special!</Text>}
+            </View>
           </View>
 
           <View style={styles.tableLayout}>
@@ -569,54 +573,61 @@ const styles = StyleSheet.create({
   },
   gameContent: {
     flex: 1,
-    padding: SPACING.sm,
-    paddingTop: SPACING.xxxl + SPACING.md,
+    padding: SPACING.xs,
   },
   gameContentCompact: {
     padding: SPACING.xs,
-    paddingTop: SPACING.xxxl,
   },
-  header: {
-    position: 'absolute',
-    top: SPACING.sm,
-    left: SPACING.sm,
-    zIndex: 5,
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: SPACING.xs,
+    paddingVertical: SPACING.xs,
+    gap: SPACING.xs,
+    flexWrap: 'wrap',
+  },
+  logoWrapper: {
+    flex: 0,
+  },
+  leadSuitWrapper: {
+    flex: 0,
+    marginHorizontal: SPACING.xs,
   },
   roundInfo: {
-    alignItems: 'center',
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.md,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 12,
-    marginBottom: SPACING.md,
-    marginTop: SPACING.xxxl,
-  },
-  roundInfoMobile: {
+    flex: 1,
+    alignItems: 'flex-end',
     paddingVertical: SPACING.xs,
     paddingHorizontal: SPACING.sm,
-    marginBottom: SPACING.sm,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 8,
+    minWidth: 100,
+  },
+  roundInfoMobile: {
+    paddingVertical: 4,
+    paddingHorizontal: SPACING.xs,
+    minWidth: 80,
   },
   roundText: {
-    fontSize: FONT_SIZES.lg,
+    fontSize: FONT_SIZES.md,
     fontWeight: '700',
     color: COLORS.gold,
-    letterSpacing: 1.2,
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    letterSpacing: 0.5,
+    textAlign: 'right',
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xl,
+    fontSize: FONT_SIZES.sm,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.xs,
     color: COLORS.goldLight,
     fontStyle: 'italic',
-    marginTop: SPACING.xs,
+    marginTop: 2,
     fontWeight: '600',
+    textAlign: 'right',
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.md,
+    fontSize: FONT_SIZES.xs - 1,
   },
   tableLayout: {
     flex: 1,
