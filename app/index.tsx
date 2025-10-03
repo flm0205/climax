@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
@@ -8,7 +8,6 @@ import { useNetworkStatus } from '../services/networkService';
 import { hasActiveOfflineGame } from '../services/offlineGameService';
 import Button from '../components/Button';
 import CompactLogo from '../components/CompactLogo';
-import LogoSvg from '../components/LogoSvg';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -32,7 +31,11 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <LogoSvg width={280} height={140} />
+              <Image
+                source={require('../assets/images/Logo_Transparent.png')}
+                style={styles.heroLogo}
+                resizeMode="contain"
+              />
             </View>
 
             <View style={styles.statusBadge}>
@@ -184,6 +187,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: SPACING.md,
+  },
+  heroLogo: {
+    width: 280,
+    height: 280,
+    maxWidth: '90%',
   },
   statusBadge: {
     flexDirection: 'row',

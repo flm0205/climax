@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions, Image } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../../constants/theme';
 import CompactLogo from '../../components/CompactLogo';
-import LogoSvg from '../../components/LogoSvg';
 import { GameState, Player, Card as CardType } from '../../types/game';
 import { getGameState, updateGameState, subscribeGameState, saveGameHistory } from '../../services/gameService';
 import { updateLobbyStatus } from '../../services/lobbyService';
@@ -401,22 +400,23 @@ export default function GameScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.logoWatermark}>
-        <LogoSvg width={300} height={150} opacity={0.08} />
-      </View>
+      <Image
+        source={require('../../assets/images/Logo_Transparent.png')}
+        style={styles.logoWatermark}
+        resizeMode="contain"
+      />
       <ScrollView contentContainerStyle={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
-        <View style={styles.headerBar}>
-          <View style={styles.roundInfoContainer}>
-            <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
-              Round {gameState.currentSequenceIndex + 1}
-            </Text>
-            {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
+        {gameState.currentRound && (
+          <View style={styles.leadSuitContainer}>
+            <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
           </View>
-          {gameState.currentRound && (
-            <View style={styles.leadSuitContainer}>
-              <LeadSuitIndicator leadSuitCard={gameState.currentRound.leadSuitCard} />
-            </View>
-          )}
+        )}
+
+        <View style={styles.roundInfoContainer}>
+          <Text style={[styles.roundText, isSmallScreen && styles.roundTextMobile]}>
+            Round {gameState.currentSequenceIndex + 1} / {gameState.roundSequence.length}
+          </Text>
+          {isOneCard && <Text style={[styles.specialRoundText, isSmallScreen && styles.specialRoundTextMobile]}>Special: You can't see your card!</Text>}
         </View>
 
         <View style={[styles.playersContainer, isSmallScreen && styles.playersContainerMobile]}>
@@ -555,9 +555,12 @@ const styles = StyleSheet.create({
   },
   logoWatermark: {
     position: 'absolute',
-    top: '40%',
+    top: '35%',
     left: '50%',
-    transform: [{ translateX: -150 }, { translateY: -75 }],
+    width: 350,
+    height: 350,
+    transform: [{ translateX: -175 }, { translateY: -175 }],
+    opacity: 0.08,
     zIndex: 0,
     pointerEvents: 'none',
   },
@@ -572,60 +575,55 @@ const styles = StyleSheet.create({
   },
   gameContent: {
     flexGrow: 1,
-    padding: SPACING.md,
+    padding: SPACING.sm,
     paddingBottom: SPACING.xl,
   },
   gameContentCompact: {
-    padding: SPACING.sm,
+    padding: SPACING.xs,
     paddingBottom: SPACING.lg,
   },
-  headerBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: SPACING.lg,
-    paddingHorizontal: SPACING.md,
-    gap: SPACING.md,
-  },
   leadSuitContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 12,
-    padding: SPACING.sm,
-    borderWidth: 2,
-    borderColor: 'rgba(226, 178, 58, 0.3)',
+    position: 'absolute',
+    top: 0,
+    left: '50%',
+    transform: [{ translateX: -40 }],
+    zIndex: 10,
   },
   roundInfoContainer: {
-    flex: 1,
-    alignItems: 'flex-start',
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
+    alignItems: 'center',
+    paddingVertical: SPACING.lg,
+    paddingHorizontal: SPACING.xl,
+    marginBottom: SPACING.md,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 2,
-    borderColor: 'rgba(226, 178, 58, 0.3)',
+    borderColor: 'rgba(226, 178, 58, 0.4)',
+    ...SHADOWS.medium,
   },
   roundText: {
-    fontSize: FONT_SIZES.xxl,
-    fontWeight: '700',
+    fontSize: FONT_SIZES.xxxl,
+    fontWeight: '800',
     color: COLORS.text,
-    letterSpacing: 0.5,
+    letterSpacing: 1,
+    textAlign: 'center',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   roundTextMobile: {
-    fontSize: FONT_SIZES.xl,
+    fontSize: FONT_SIZES.xxl,
   },
   specialRoundText: {
-    fontSize: FONT_SIZES.sm,
+    fontSize: FONT_SIZES.md,
     color: COLORS.gold,
     fontStyle: 'italic',
-    marginTop: SPACING.xs,
-    fontWeight: '500',
-    letterSpacing: 0.3,
+    marginTop: SPACING.sm,
+    fontWeight: '600',
+    textAlign: 'center',
+    letterSpacing: 0.5,
   },
   specialRoundTextMobile: {
-    fontSize: FONT_SIZES.xs,
+    fontSize: FONT_SIZES.sm,
   },
   playersContainer: {
     flexDirection: 'row',
@@ -640,14 +638,11 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.md,
   },
   trickArea: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderRadius: 16,
-    padding: SPACING.xl,
+    padding: SPACING.lg,
     marginBottom: SPACING.lg,
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(226, 178, 58, 0.5)',
-    ...SHADOWS.medium,
   },
   trickLabel: {
     fontSize: FONT_SIZES.md,
