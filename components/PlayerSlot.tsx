@@ -78,7 +78,7 @@ export default function PlayerSlot({
     outputRange: [12, 20],
   });
 
-  const avatarColors = isCurrentPlayer
+  const avatarColors: any = isCurrentPlayer
     ? ['#E2B23A', '#D4A02F']
     : ['#8B0000', '#A52A2A'];
 
