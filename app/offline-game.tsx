@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Alert, Modal, useWindowDimensions, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, FONT_SIZES, SHADOWS } from '../constants/theme';
 import CompactLogo from '../components/CompactLogo';
-import LogoSvg from '../components/LogoSvg';
 import { GameState, Player, Card as CardType } from '../types/game';
 import { loadOfflineGame, updateOfflineGame, endOfflineGame } from '../services/offlineGameService';
 import Card from '../components/Card';
@@ -335,9 +334,11 @@ export default function OfflineGameScreen() {
 
   return (
     <LinearGradient colors={COLORS.backgroundGradient as any} style={styles.container}>
-      <View style={styles.logoWatermark}>
-        <LogoSvg width={300} height={150} opacity={0.1} />
-      </View>
+      <Image
+        source={require('../assets/images/Logo_Transparent.png')}
+        style={styles.logoWatermark}
+        resizeMode="contain"
+      />
       <SafeAreaView style={styles.safeArea}>
         <View style={[styles.gameContent, isShortScreen && styles.gameContentCompact]}>
           {gameState.currentRound && (
@@ -565,9 +566,12 @@ const styles = StyleSheet.create({
   },
   logoWatermark: {
     position: 'absolute',
-    top: '40%',
+    top: '35%',
     left: '50%',
-    transform: [{ translateX: -150 }, { translateY: -75 }],
+    width: 350,
+    height: 350,
+    transform: [{ translateX: -175 }, { translateY: -175 }],
+    opacity: 0.08,
     zIndex: 0,
     pointerEvents: 'none',
   },
