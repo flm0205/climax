@@ -237,9 +237,17 @@ export default function GameScreen() {
   };
 
   const handleNextRound = async () => {
-    if (!gameState) return;
-    if (gameState.phase !== 'round-end') return;
+    console.log('[Game] handleNextRound called. Phase:', gameState?.phase);
+    if (!gameState) {
+      console.warn('[Game] No game state available');
+      return;
+    }
+    if (gameState.phase !== 'round-end') {
+      console.warn('[Game] Cannot continue - phase is not round-end. Current phase:', gameState.phase);
+      return;
+    }
 
+    console.log('[Game] Closing scoreboard and preparing next round');
     setShowScoreboard(false);
 
     const newState = { ...gameState };
@@ -472,7 +480,14 @@ export default function GameScreen() {
               </View>
             ))}
 
-            <Button title="Continue" onPress={handleNextRound} style={styles.continueButton} disabled={gameState.phase !== 'round-end'} />
+            <Button
+              title="Continue"
+              onPress={() => {
+                console.log('[Game] Continue button pressed');
+                handleNextRound();
+              }}
+              style={styles.continueButton}
+            />
           </View>
         </View>
       </Modal>
