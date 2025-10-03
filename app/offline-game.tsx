@@ -454,7 +454,6 @@ export default function OfflineGameScreen() {
             </View>
           )}
         </View>
-        </ScrollView>
 
         <Modal
           visible={
