@@ -355,93 +355,92 @@ export default function OfflineGameScreen() {
           </View>
 
           <View style={styles.tableLayout}>
-            <View style={styles.opponentTop}>
-              {gameState.players
-                .filter((p) => p.id !== playerId)
-                .slice(0, 2)
-                .map((player, index) => (
-                  <PlayerSlot
-                    key={player.id}
-                    player={player}
-                    isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
-                    showBet={true}
-                    showTricks={gameState.phase === 'playing'}
-                    position="top"
-                    showCard={isOneCard && gameState.phase === 'betting'}
-                    isCurrentPlayer={false}
-                  />
-                ))}
-            </View>
+            {(() => {
+              const { top, left, right } = distributeOpponents(gameState.players, playerId);
 
-            <View style={styles.tableSides}>
-              <View style={styles.opponentLeft}>
-                {gameState.players
-                  .filter((p) => p.id !== playerId)
-                  .slice(2, 3)
-                  .map((player) => (
-                    <PlayerSlot
-                      key={player.id}
-                      player={player}
-                      isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
-                      showBet={true}
-                      showTricks={gameState.phase === 'playing'}
-                      position="left"
-                      showCard={isOneCard && gameState.phase === 'betting'}
-                      isCurrentPlayer={false}
-                    />
-                  ))}
-              </View>
+              return (
+                <>
+                  <View style={styles.opponentTop}>
+                    {top.map((player) => (
+                      <PlayerSlot
+                        key={player.id}
+                        player={player}
+                        isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
+                        showBet={true}
+                        showTricks={gameState.phase === 'playing'}
+                        position="top"
+                        showCard={isOneCard && gameState.phase === 'betting'}
+                        isCurrentPlayer={false}
+                      />
+                    ))}
+                  </View>
 
-              <View style={styles.centerPlayArea}>
-                {gameState.phase === 'playing' && gameState.currentRound && gameState.currentRound.currentTrick.cards.length > 0 && (
-                  <View style={styles.trickArea}>
-                    <View style={styles.trickCards}>
-                      {gameState.currentRound.currentTrick.cards.map((cardPlay) => (
-                        <View key={cardPlay.playerId} style={styles.trickCard}>
-                          <Card card={cardPlay.card} size="small" />
-                          <Text style={styles.trickPlayerName}>
-                            {gameState.players.find((p) => p.id === cardPlay.playerId)?.name}
-                          </Text>
+                  <View style={styles.tableSides}>
+                    <View style={styles.opponentLeft}>
+                      {left.map((player) => (
+                        <PlayerSlot
+                          key={player.id}
+                          player={player}
+                          isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
+                          showBet={true}
+                          showTricks={gameState.phase === 'playing'}
+                          position="left"
+                          showCard={isOneCard && gameState.phase === 'betting'}
+                          isCurrentPlayer={false}
+                        />
+                      ))}
+                    </View>
+
+                    <View style={styles.centerPlayArea}>
+                      {gameState.phase === 'playing' && gameState.currentRound && gameState.currentRound.currentTrick.cards.length > 0 && (
+                        <View style={styles.trickArea}>
+                          <View style={styles.trickCards}>
+                            {gameState.currentRound.currentTrick.cards.map((cardPlay) => (
+                              <View key={cardPlay.playerId} style={styles.trickCard}>
+                                <Card card={cardPlay.card} size="small" />
+                                <Text style={styles.trickPlayerName}>
+                                  {gameState.players.find((p) => p.id === cardPlay.playerId)?.name}
+                                </Text>
+                              </View>
+                            ))}
+                          </View>
                         </View>
+                      )}
+                    </View>
+
+                    <View style={styles.opponentRight}>
+                      {right.map((player) => (
+                        <PlayerSlot
+                          key={player.id}
+                          player={player}
+                          isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
+                          showBet={true}
+                          showTricks={gameState.phase === 'playing'}
+                          position="right"
+                          showCard={isOneCard && gameState.phase === 'betting'}
+                          isCurrentPlayer={false}
+                        />
                       ))}
                     </View>
                   </View>
-                )}
-              </View>
 
-              <View style={styles.opponentRight}>
-                {gameState.players
-                  .filter((p) => p.id !== playerId)
-                  .slice(3, 4)
-                  .map((player) => (
-                    <PlayerSlot
-                      key={player.id}
-                      player={player}
-                      isCurrentTurn={gameState.players.findIndex((p) => p.id === player.id) === gameState.currentPlayerIndex}
-                      showBet={true}
-                      showTricks={gameState.phase === 'playing'}
-                      position="right"
-                      showCard={isOneCard && gameState.phase === 'betting'}
-                      isCurrentPlayer={false}
-                    />
-                  ))}
-              </View>
-            </View>
-
-            <View style={styles.playerBottom}>
-              {currentPlayer && (
-                <PlayerSlot
-                  key={currentPlayer.id}
-                  player={currentPlayer}
-                  isCurrentTurn={gameState.players.findIndex((p) => p.id === playerId) === gameState.currentPlayerIndex}
-                  showBet={true}
-                  showTricks={gameState.phase === 'playing'}
-                  position="bottom"
-                  showCard={isOneCard && gameState.phase === 'betting'}
-                  isCurrentPlayer={true}
-                />
-              )}
-            </View>
+                  <View style={styles.playerBottom}>
+                    {currentPlayer && (
+                      <PlayerSlot
+                        key={currentPlayer.id}
+                        player={currentPlayer}
+                        isCurrentTurn={gameState.players.findIndex((p) => p.id === playerId) === gameState.currentPlayerIndex}
+                        showBet={true}
+                        showTricks={gameState.phase === 'playing'}
+                        position="bottom"
+                        showCard={isOneCard && gameState.phase === 'betting'}
+                        isCurrentPlayer={true}
+                      />
+                    )}
+                  </View>
+                </>
+              );
+            })()}
           </View>
 
           {currentPlayer && (
@@ -556,6 +555,33 @@ function calculateInvalidBets(currentBets: { [key: string]: number }, totalTrick
   return [];
 }
 
+function distributeOpponents(allPlayers: Player[], localPlayerId: string) {
+  const opponents = allPlayers.filter((p) => p.id !== localPlayerId);
+  const playerCount = allPlayers.length;
+
+  if (playerCount === 2) {
+    return { top: opponents, left: [], right: [] };
+  }
+
+  if (playerCount === 3) {
+    return { top: [opponents[0]], left: [], right: [opponents[1]] };
+  }
+
+  if (playerCount === 4) {
+    return { top: [opponents[0]], left: [opponents[2]], right: [opponents[1]] };
+  }
+
+  if (playerCount === 5) {
+    return { top: [opponents[0], opponents[1]], left: [opponents[3]], right: [opponents[2]] };
+  }
+
+  if (playerCount === 6) {
+    return { top: [opponents[0], opponents[1]], left: [opponents[4]], right: [opponents[2], opponents[3]] };
+  }
+
+  return { top: [], left: [], right: [] };
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -639,36 +665,37 @@ const styles = StyleSheet.create({
   },
   tableLayout: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingVertical: SPACING.xs,
   },
   opponentTop: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     gap: SPACING.sm,
     paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: SPACING.md,
     marginBottom: SPACING.md,
     width: '100%',
   },
   tableSides: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: SPACING.md,
-    paddingHorizontal: SPACING.sm,
     width: '100%',
-    maxWidth: 800,
+    paddingHorizontal: SPACING.sm,
   },
   opponentLeft: {
-    position: 'absolute',
-    left: SPACING.sm,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: SPACING.sm,
   },
   opponentRight: {
-    position: 'absolute',
-    right: SPACING.sm,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    gap: SPACING.sm,
   },
   centerPlayArea: {
     justifyContent: 'center',
